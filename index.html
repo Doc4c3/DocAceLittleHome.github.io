@@ -7,17 +7,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Novecento+Wide:wght@400;700&display=swap" rel="stylesheet">
     <style> 
         h1 {
-            color: blue;
+            color: white;
             text-align: center;
             font-family: 'Novecento Wide', sans-serif; /* 使用 Novecento Wide 字体 */
         }
         h2 {
-            color: green;
+            color: white;
+            text-align: center;
+            font-family: 'Novecento Wide', sans-serif; /* 使用 Novecento Wide 字体 */
+        }
+        h3 {
+            color: white;
             text-align: center;
             font-family: 'Novecento Wide', sans-serif; /* 使用 Novecento Wide 字体 */
         }
         body {
-            background-color: lightgray;
+            background-color: #000; /* 设置页面背景为黑色 */
+            color: white; /* 设置页面文字颜色为白色 */
             font-family: 'Novecento Wide', sans-serif; /* 更改整个页面的字体 */
             background-image: url('8f8a8af6d4afbc463b4b43460df474493d0c6123.png'); /* 添加背景图片 */
             background-size: cover; /* 使背景图片覆盖整个页面 */
@@ -27,15 +33,37 @@
         .link {
             margin: 0 auto;
             width: 80%;
-            background-color: #f4f4f4;
+            background-color: #000; /* 设置 .link 背景为黑色 */
             border: 1px solid #ccc;
             border-radius: 5px;
+            text-align: center; /* 使 .link 内容居中 */
         }
         .link a {
             display: block;
             padding: 10px;
             text-decoration: none;
-            color: #333;
+            color: white; /* 设置链接文字颜色为白色 */
+        }
+        .link a:hover {
+            background-color: pink; /* 设置链接悬停时背景颜色为粉色 */
+        }
+        .recorded-ctfs {
+            margin: 0 auto;
+            width: 80%;
+            background-color: #000; /* 设置 .recorded-ctfs 背景为黑色 */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center; /* 使 .recorded-ctfs 内容居中 */
+        }
+        .recorded-ctfs ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .recorded-ctfs li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            color: white; /* 设置列表项文字颜色为白色 */
         }
     </style>
 </head>
