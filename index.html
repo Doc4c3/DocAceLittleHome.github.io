@@ -75,9 +75,30 @@
         .numeric-text {
             font-family: 'Bender', sans-serif;
         }
+                .welcome-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10em;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 1000;
+        }
+
+        .welcome-message.visible {
+            opacity: 2;
+        }
     </style>
 </head>
 <body>
+    <div class="welcome-message">欢迎</div>
     <h1 class="english-text">Welcome to DA's blog</h1>
     <h2 class="english-text">mostly about CTFs and hacking</h2>
     <div class="link">
@@ -119,6 +140,20 @@
                     element.classList.add('english-text');
                 }
             });
+        });
+            document.addEventListener("DOMContentLoaded", function() {
+            // 获取欢迎消息元素
+            const welcomeMessage = document.querySelector('.welcome-message');
+
+            // 显示欢迎消息
+            setTimeout(() => {
+                welcomeMessage.classList.add('visible');
+            }, 500); // 0.5秒后显示
+
+            // 隐藏欢迎消息
+            setTimeout(() => {
+                welcomeMessage.classList.remove('visible');
+            }, 1300); // 0.8秒后开始隐藏（总共1.8秒，其中1秒用于消失动画）
         });
     </script>
 </body>
