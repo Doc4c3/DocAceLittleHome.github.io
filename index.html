@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DA's BLOG</title>
-    <link href="https://fonts.googleapis.com/css2?family=Novecento+Wide:wght@400;700&display=swap" rel="stylesheet">
     <style>
         @font-face {
             font-family: 'Novecento Wide';
@@ -15,14 +14,14 @@
 
         @font-face {
             font-family: 'Novecento Wide';
-            src: url('fonts/NovecentoWide-Bold.otf') format('opentype');
+            src: url('fonts/Novecento-Wide-Bold-2.otf') format('opentype');
             font-weight: 700;
             font-style: normal;
         }
 
         @font-face {
             font-family: 'Bender';
-            src: url('fonts/Bender-Regular.ttf') format('truetype');
+            src: url('fonts/Bender.otf') format('truetype');
             font-weight: 400;
             font-style: normal;
         }
@@ -35,6 +34,9 @@
             background-size: cover; /* 使背景图片覆盖整个页面 */
             background-repeat: no-repeat; /* 防止背景图片重复 */
             background-attachment: fixed; /* 使背景图片固定，不随滚动条滚动 */
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
         h1, h2, h3 {
@@ -75,7 +77,9 @@
         .numeric-text {
             font-family: 'Bender', sans-serif;
         }
-                .welcome-message {
+
+        /* 欢迎消息样式 */
+        .welcome-message {
             position: fixed;
             top: 0;
             left: 0;
@@ -86,18 +90,57 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 10em;
+            font-size: 5em;
             opacity: 0;
             transition: opacity 1s ease-in-out;
             z-index: 1000;
         }
 
         .welcome-message.visible {
-            opacity: 2;
+            opacity: 1;
+        }
+        /* 遮罩层样式 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 999;
+        }
+        /* CTF 历史记录样式 */
+        .ctf-history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #111; /* 深色背景 */
+        }
+
+        .ctf-history-item img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+        }
+
+        .ctf-history-item a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .ctf-history-item a:hover {
+            color: pink;
         }
     </style>
 </head>
 <body>
+    <div class="overlay"></div> <!-- 添加一个遮罩层 -->
     <div class="welcome-message">欢迎</div>
     <h1 class="english-text">Welcome to DA's blog</h1>
     <h2 class="english-text">mostly about CTFs and hacking</h2>
@@ -106,54 +149,49 @@
         <a href="https://www.hackthebox.eu/" target="_blank" class="english-text">HackTheBox</a>
         <a href="https://bengbuguards.github.io/StarLocator/" target="_blank" class="english-text">星座定位器</a>
         <a href="https://s.threatbook.com/" target="_blank" class="english-text">云沙箱</a>
-        <a href="https://www.bilibili.com/video/BV16t411c7nd/?spm_id_from=333.1387.favlist.content.click&vd_source=c1b2793368e9023f41eb73afbf42fd89" target="_blank" class="english-text">netcat的使用指南（看到我记得提醒我去看）</a>
+        <a href="https://www.bilibili.com/video/BV16t411c7nd/?spm_id_from=333.1387.favlist.content.click&vd_source=c1b2793368e9023f41eb77afbf42fd89" target="_blank" class="english-text">netcat的使用指南（看到我记得提醒我去看）</a>
         <a href="https://www.runoob.com/" target="_blank" class="english-text">菜鸟编程（学点语言）</a>
         <a href="https://chenoge.github.io/2020/01/02/%E6%90%9C%E7%B4%A2%E8%AF%AD%E6%B3%95/" target="_blank" class="english-text">一些常见的搜索语法 ></a>
     </div>
     <br>
     <div class="recorded-ctfs">
         <h2 class="english-text">recorded CTFs</h2>
-        <div>
-            <h3 class="numeric-text">20xx-xx-xx</h3> <!-- 这里假设20xx-xx-xx是阿拉伯数字 -->
-            <ul>
-                <li class="english-text">CTF名称：xxx</li>
-                <li class="english-text">题目类型：xxx</li>
-                <li class="english-text">题目难度：xxx</li>
-                <li class="english-text">解题思路：xxx</li>
-                <li class="english-text">解题过程：xxx</li>
-                <li class="english-text">感想：xxx</li>
-            </ul>
+        <div class="ctf-history-item">
+            <img src="history/ctf1-preview.png" alt="CTF1 Preview">
+            <div>
+                <h3 class="english-text"><a href="history/ctf1.html" target="_blank">CTF1 标题</a></h3>
+                <p class="english-text">CTF1 预览描述</p>
+            </div>
         </div>
+        <div class="ctf-history-item">
+            <img src="history/ctf2-preview.png" alt="CTF2 Preview">
+            <div>
+                <h3 class="english-text"><a href="history/ctf2.html" target="_blank">CTF2 标题</a></h3>
+                <p class="english-text">CTF2 预览描述</p>
+            </div>
+        </div>
+        <!-- 可以继续添加更多的 CTF 历史记录项 -->
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // 获取所有需要检测的文本元素
-            const elements = document.querySelectorAll('h1, h2, h3, .link a, .recorded-ctfs li');
-
-            elements.forEach(element => {
-                const text = element.textContent.trim();
-
-                // 检测文本是否包含阿拉伯数字
-                if (/\d/.test(text)) {
-                    element.classList.add('numeric-text');
-                } else {
-                    element.classList.add('english-text');
-                }
-            });
-        });
-            document.addEventListener("DOMContentLoaded", function() {
             // 获取欢迎消息元素
             const welcomeMessage = document.querySelector('.welcome-message');
-
+            const overlay = document.querySelector('.overlay');
             // 显示欢迎消息
             setTimeout(() => {
                 welcomeMessage.classList.add('visible');
-            }, 500); // 0.5秒后显示
-
+           }, 100);
             // 隐藏欢迎消息
             setTimeout(() => {
                 welcomeMessage.classList.remove('visible');
-            }, 1300); // 0.8秒后开始隐藏（总共1.8秒，其中1秒用于消失动画）
+            }, 2300); // 0.8秒后开始隐藏（总共1.8秒，其中1秒用于消失动画）
+            setTimeout(() => {
+                overlay.style.transition = 'opacity 1s ease-in-out';
+                overlay.style.opacity = 0;
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 1000); // 等待1秒动画结束后将其隐藏
+            }, 2300);
         });
     </script>
 </body>
