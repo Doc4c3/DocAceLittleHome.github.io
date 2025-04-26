@@ -5,102 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DA's BLOG</title>
     <link href="https://fonts.googleapis.com/css2?family=Novecento+Wide:wght@400;700&display=swap" rel="stylesheet">
-    <style> 
-        h1 {
-            color: white;
-            text-align: center;
-            font-family: 'Novecento Wide', sans-serif; /* 使用 Novecento Wide 字体 */
+    <style>
+        @font-face {
+            font-family: 'Novecento Wide';
+            src: url('fonts/NovecentoWide-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
         }
-        h2 {
-            color: white;
-            text-align: center;
-            font-family: 'Novecento Wide', sans-serif; /* 使用 Novecento Wide 字体 */
+
+        @font-face {
+            font-family: 'Novecento Wide';
+            src: url('fonts/NovecentoWide-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
         }
-        h3 {
-            color: white;
-            text-align: center;
-            font-family: 'Novecento Wide', sans-serif; /* 使用 Novecento Wide 字体 */
+
+        @font-face {
+            font-family: 'Bender';
+            src: url('fonts/Bender-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
         }
+
         body {
             background-color: #000; /* 设置页面背景为黑色 */
             color: white; /* 设置页面文字颜色为白色 */
-            font-family: 'Novecento Wide', sans-serif; /* 更改整个页面的字体 */
+            font-family: 'Novecento Wide', sans-serif; /* 默认字体 */
             background-image: url('8f8a8af6d4afbc463b4b43460df474493d0c6123.png'); /* 添加背景图片 */
             background-size: cover; /* 使背景图片覆盖整个页面 */
             background-repeat: no-repeat; /* 防止背景图片重复 */
             background-attachment: fixed; /* 使背景图片固定，不随滚动条滚动 */
         }
-        .link {
+
+        h1, h2, h3 {
+            text-align: center;
+            color: white;
+        }
+
+        .link, .recorded-ctfs {
             margin: 0 auto;
             width: 80%;
-            background-color: #000; /* 设置 .link 背景为黑色 */
+            background-color: #000; /* 设置背景为黑色 */
             border: 1px solid #ccc;
             border-radius: 5px;
-            text-align: center; /* 使 .link 内容居中 */
+            text-align: center; /* 使内容居中 */
         }
-        .link a {
+
+        .link a, .recorded-ctfs li {
             display: block;
             padding: 10px;
             text-decoration: none;
-            color: white; /* 设置链接文字颜色为白色 */
+            color: white; /* 设置文字颜色为白色 */
         }
+
         .link a:hover {
-            background-color: pink; /* 设置链接悬停时背景颜色为粉色 */
+            background-color: pink; /* 设置悬停时背景颜色为粉色 */
         }
-        .recorded-ctfs {
-            margin: 0 auto;
-            width: 80%;
-            background-color: #000; /* 设置 .recorded-ctfs 背景为黑色 */
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: center; /* 使 .recorded-ctfs 内容居中 */
-        }
+
         .recorded-ctfs ul {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-        .recorded-ctfs li {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            color: white; /* 设置列表项文字颜色为白色 */
+
+        .english-text {
+            font-family: 'Novecento Wide', sans-serif;
+        }
+
+        .numeric-text {
+            font-family: 'Bender', sans-serif;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to DA's blog</h1>
-    <h2>mostly about CTFs and hacking</h2>
+    <h1 class="english-text">Welcome to DA's blog</h1>
+    <h2 class="english-text">mostly about CTFs and hacking</h2>
     <div class="link">
-        <h2>Some useful links</h2>
-        <br>
-        <a href="https://www.hackthebox.eu/" target="_blank">HackTheBox</a>
-        <br>
-        <a href="https://bengbuguards.github.io/StarLocator/" target="_blank">星座定位器</a>
-        <br>
-        <a href="https://s.threatbook.com/" target="_blank">云沙箱</a>
-        <br>
-        <a href="https://www.bilibili.com/video/BV16t411c7nd/?spm_id_from=333.1387.favlist.content.click&vd_source=c1b2793368e9023f41eb73afbf42fd89" target="_blank">netcat的使用指南（看到我记得提醒我去看）</a>
-        <br>
-        <a href="https://www.runoob.com/" target="_blank">菜鸟编程（学点语言）</a>
-        <br>
-        <a href="https://chenoge.github.io/2020/01/02/%E6%90%9C%E7%B4%A2%E8%AF%AD%E6%B3%95/" target="_blank">一些常见的搜索语法 ></a>
+        <h2 class="english-text">Some useful links</h2>
+        <a href="https://www.hackthebox.eu/" target="_blank" class="english-text">HackTheBox</a>
+        <a href="https://bengbuguards.github.io/StarLocator/" target="_blank" class="english-text">星座定位器</a>
+        <a href="https://s.threatbook.com/" target="_blank" class="english-text">云沙箱</a>
+        <a href="https://www.bilibili.com/video/BV16t411c7nd/?spm_id_from=333.1387.favlist.content.click&vd_source=c1b2793368e9023f41eb73afbf42fd89" target="_blank" class="english-text">netcat的使用指南（看到我记得提醒我去看）</a>
+        <a href="https://www.runoob.com/" target="_blank" class="english-text">菜鸟编程（学点语言）</a>
+        <a href="https://chenoge.github.io/2020/01/02/%E6%90%9C%E7%B4%A2%E8%AF%AD%E6%B3%95/" target="_blank" class="english-text">一些常见的搜索语法 ></a>
     </div>
     <br>
     <div class="recorded-ctfs">
-        <h2>recorded CTFs</h2>
-        <br>
+        <h2 class="english-text">recorded CTFs</h2>
         <div>
-            <h3>20xx-xx-xx</h3>
-            <br>
+            <h3 class="numeric-text">20xx-xx-xx</h3> <!-- 这里假设20xx-xx-xx是阿拉伯数字 -->
             <ul>
-                <li>CTF名称：xxx</li>
-                <li>题目类型：xxx</li>
-                <li>题目难度：xxx</li>
-                <li>解题思路：xxx</li>
-                <li>解题过程：xxx</li>
-                <li>感想：xxx</li>
+                <li class="english-text">CTF名称：xxx</li>
+                <li class="english-text">题目类型：xxx</li>
+                <li class="english-text">题目难度：xxx</li>
+                <li class="english-text">解题思路：xxx</li>
+                <li class="english-text">解题过程：xxx</li>
+                <li class="english-text">感想：xxx</li>
             </ul>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 获取所有需要检测的文本元素
+            const elements = document.querySelectorAll('h1, h2, h3, .link a, .recorded-ctfs li');
+
+            elements.forEach(element => {
+                const text = element.textContent.trim();
+
+                // 检测文本是否包含阿拉伯数字
+                if (/\d/.test(text)) {
+                    element.classList.add('numeric-text');
+                } else {
+                    element.classList.add('english-text');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
