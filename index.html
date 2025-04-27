@@ -36,15 +36,18 @@
             background-attachment: fixed; /* 使背景图片固定，不随滚动条滚动 */
             margin: 0;
             padding: 0;
-            overflow: scroll;
+            z-index: 100;
+            overflow: scroll; /* 防止页面内容溢出 */
         }
 
         h1, h2, h3 {
+            z-index: 101;
             text-align: center;
             color: white;
         }
 
         .link, .recorded-ctfs {
+            z-index: 101;
             margin: 0 auto;
             width: 80%;
             background-color: #000; /* 设置背景为黑色 */
@@ -54,6 +57,7 @@
         }
 
         .link a, .recorded-ctfs li {
+            z-index: 101;
             display: block;
             padding: 10px;
             text-decoration: none;
@@ -65,12 +69,14 @@
         }
 
         .recorded-ctfs ul {
+            z-index: 101;
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
         .english-text {
+            z-index: 101;
             font-family: 'Novecento Wide', sans-serif;
         }
 
@@ -99,6 +105,7 @@
         .welcome-message.visible {
             opacity: 1;
         }
+
         /* 遮罩层样式 */
         .overlay {
             position: fixed;
@@ -109,7 +116,9 @@
             background-color: black;
             z-index: 999;
             opacity: 1;
+            transition: opacity 1s ease-in-out;
         }
+
         /* CTF 历史记录样式 */
         .ctf-history-item {
             display: flex;
@@ -120,16 +129,19 @@
             border-radius: 5px;
             padding: 10px;
             box-sizing: border-box;
+            z-index: 101;
             background-color: #111; /* 深色背景 */
         }
 
         .ctf-history-item img {
+            z-index: 101;
             max-width: 100px;
             max-height: 100px;
             border-radius: 5px;
         }
 
         .ctf-history-item a {
+            z-index: 101;
             text-decoration: none;
             color: white;
             font-weight: bold;
@@ -140,11 +152,57 @@
         .ctf-history-item a:hover {
             color: pink;
         }
+
+        .time-block {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: transparent; /* 无底色 */
+            border: 2px solid gray; /* 灰色2px边框 */
+            color: white; /* 设置文字颜色为白色 */
+            font-family: 'Bender', sans-serif; /* 使用Bender字体 */
+            font-size: 1em; /* 缩小字体 */
+            padding: 3px 5px; /* 缩小内边距 */
+            z-index: 1001; /* 确保时间块在其他内容之上 */
+            border-radius: 5px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #000;
+            color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover {
+            background-color: pink;
+        }
+
+        .pagination .active-page {
+            background-color: pink;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <div class="overlay"></div> <!-- 添加一个遮罩层 -->
-    <div class="welcome-message">欢迎</div>
+    <div class="time-block" id="time-block"></div>
     <h1 class="english-text">Welcome to DA's blog</h1>
     <h2 class="english-text">mostly about CTFs and hacking</h2>
     <div class="link">
@@ -173,45 +231,139 @@
                 <p class="english-text">CTF2 预览描述</p>
             </div>
         </div>
-         <div class="ctf-history-item">
-            <img src="history/ctf3-preview.png" alt="CTF2 Preview">
+        <div class="ctf-history-item">
+            <img src="history/ctf3-preview.png" alt="CTF3 Preview">
             <div>
                 <h3 class="english-text"><a href="history/ctf3.html" target="_blank">CTF3 标题</a></h3>
                 <p class="english-text">CTF3 预览描述</p>
             </div>
         </div>
-         <div class="ctf-history-item">
-            <img src="history/ctf4-preview.png" alt="CTF2 Preview">
+        <div class="ctf-history-item">
+            <img src="history/ctf4-preview.png" alt="CTF4 Preview">
             <div>
                 <h3 class="english-text"><a href="history/ctf4.html" target="_blank">CTF4 标题</a></h3>
                 <p class="english-text">CTF4 预览描述</p>
             </div>
         </div>
-        <!-- 可以继续添加更多的 CTF 历史记录项 -->
+        <div class="ctf-history-item">
+            <img src="history/ctf5-preview.png" alt="CTF5 Preview">
+            <div>
+                <h3 class="english-text"><a href="history/ctf5.html" target="_blank">CTF5 标题</a></h3>
+                <p class="english-text">CTF5 预览描述</p>
+            </div>
+        </div>
+        <div class="ctf-history-item">
+            <img src="history/ctf6-preview.png" alt="CTF6 Preview">
+            <div>
+                <h3 class="english-text"><a href="history/ctf6.html" target="_blank">CTF6 标题</a></h3>
+                <p class="english-text">CTF6 预览描述</p>
+            </div>
+        </div>
+        <div class="ctf-history-item">
+            <img src="history/ctf7-preview.png" alt="CTF7 Preview">
+            <div>
+                <h3 class="english-text"><a href="history/ctf7.html" target="_blank">CTF7 标题</a></h3>
+                <p class="english-text">CTF7 预览描述</p>
+            </div>
+        </div>
+        <div class="ctf-history-item">
+            <img src="history/ctf8-preview.png" alt="CTF8 Preview">
+            <div>
+                <h3 class="english-text"><a href="history/ctf8.html" target="_blank">CTF8 标题</a></h3>
+                <p class="english-text">CTF8 预览描述</p>
+            </div>
+        </div>
+        <div class="overlay"></div> <!-- 添加一个遮罩层 -->
+        <div class="welcome-message">欢迎</div>
+        <div class="pagination">
+            <!-- 翻页按钮会在JavaScript中动态生成 -->
+        </div>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-    // 获取欢迎消息元素
-    const welcomeMessage = document.querySelector('.welcome-message');
-    const overlay = document.querySelector('.overlay');
-    // 显示欢迎消息
-    setTimeout(() => {
-        welcomeMessage.classList.add('visible');
-    }, 100);
-    // 隐藏欢迎消息
-    setTimeout(() => {
-        welcomeMessage.classList.remove('visible');
-        setTimeout(() => {
-            overlay.style.opacity = '0';
+            // 获取欢迎消息元素
+            const welcomeMessage = document.querySelector('.welcome-message');
+            const overlay = document.querySelector('.overlay');
+            // 显示欢迎消息
             setTimeout(() => {
-                welcomeMessage.style.display = 'none';
-                welcomeMessage.zIndex = -1;
-                overlay.style.display = 'none';
-                overlay.zIndex = -1;
-            }, 1000); // 等待1秒动画结束后将其隐藏
-        }, 1000); // 0.8秒后开始隐藏（总共1.8秒，其中1秒用于消失动画）
-    }, 2300);
-});
+                welcomeMessage.classList.add('visible');
+            }, 100);
+            // 隐藏欢迎消息
+            setTimeout(() => {
+                welcomeMessage.classList.remove('visible');
+                setTimeout(() => {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        welcomeMessage.style.display = 'none';
+                        welcomeMessage.zIndex = -1;
+                        overlay.style.display = 'none';
+                        overlay.zIndex = -1;
+                    }, 1000); // 等待1秒动画结束后将其隐藏
+                }, 1000); // 0.8秒后开始隐藏（总共1.8秒，其中1秒用于消失动画）
+            }, 2300);
+            // 显示时间
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1
+            const day = String(now.getDate()).padStart(2, '0');
+            const timeBlock = document.getElementById('time-block'); // 添加这一行来获取时间块元素
+            timeBlock.textContent = `${year}/${month}/${day}`;
+
+            // 初始化分页
+            const ctfItems = document.querySelectorAll('.ctf-history-item');
+            const itemsPerPage = 4;
+            const totalPages = Math.ceil(ctfItems.length / itemsPerPage);
+
+            for (let i = 0; i < totalPages; i++) {
+                const page = document.createElement('div');
+                page.classList.add('page');
+                page.id = `page-${i + 1}`;
+
+                for (let j = 0; j < itemsPerPage; j++) {
+                    const index = i * itemsPerPage + j;
+                    if (index < ctfItems.length) {
+                        page.appendChild(ctfItems[index]);
+                    }
+                }
+
+                const recordedCtfs = document.querySelector('.recorded-ctfs');
+                recordedCtfs.insertBefore(page, recordedCtfs.querySelector('.pagination'));
+
+                if (i === 0) {
+                    page.classList.add('active');
+                }
+            }
+
+            const pagination = document.querySelector('.pagination');
+            for (let i = 0; i < totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i + 1;
+                button.addEventListener('click', function() {
+                    changePage(i + 1, button);
+                });
+                pagination.appendChild(button);
+            }
+
+            const paginationButtons = document.querySelectorAll('.pagination button');
+            paginationButtons[0].classList.add('active-page');
+
+            function changePage(pageNumber, button) {
+                const pages = document.querySelectorAll('.page');
+                pages.forEach((page, index) => {
+                    if (index + 1 === pageNumber) {
+                        page.classList.add('active');
+                    } else {
+                        page.classList.remove('active');
+                    }
+                });
+
+                // 更新按钮状态
+                paginationButtons.forEach(btn => {
+                    btn.classList.remove('active-page');
+                });
+                button.classList.add('active-page');
+            }
+        });
     </script>
 </body>
 </html>
