@@ -154,7 +154,26 @@ Also: `banner.title` set, and the nav entry currently pointing at `decimo.top`
 retargeted to `/links`.
 
 **Placeholder cleanup:** rewrite `pages/about/index.md` as the real bio; delete
-`pages/about/site.md`; replace `locales/zh-CN.yml` contents.
+`pages/about/site.md`; replace `locales/zh-CN.yml` contents; and **override
+`themeConfig.footer`** to drop the theme's default `Sponsor YunYouJun` donation
+link, which renders on every page.
+
+Three corrections to this section, each measured after the fact rather than
+assumed:
+
+- **The footer sponsor link was missed in the original scope.** The theme's
+  default footer (`node_modules/valaxy-theme-yun/node/config.ts:60-70`) emits
+  `href="https://www.yunyoujun.cn/sponsors/"` on all 23 pages unless overridden.
+  It is upstream branding of the same class as the About-page bio and was found
+  during execution, not design.
+- **`locales/zh-CN.yml`'s `intro.*` keys are not referenced anywhere** in Valaxy,
+  `valaxy-theme-yun`, or `pages/`. Rewriting the file is therefore source
+  hygiene, **not** a rendered change — an earlier claim that these strings were
+  user-visible was wrong. The homepage description has its own owner:
+  `site.config.ts`'s `description`.
+- **`locales/en.yml` was left untouched** and still reads `Valaxy Template` /
+  `Hello, Valaxy!` on the same dead keys. Same class of leftover; no rendered
+  effect. Deferred, not forgotten.
 
 ### 2. Content model
 

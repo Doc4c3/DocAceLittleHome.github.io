@@ -834,34 +834,47 @@ Add a `footer` block to `themeConfig` in `valaxy.config.ts`:
 
 `powered: true` is deliberately left alone — a theme credit is normal and appropriate, and removing it is the owner's call, not this plan's.
 
-`since: 2025` matches the earliest content on the site (the oldest post is 2025-05); the theme default of `2022` would render a false start year. **Flag this value to the owner as a guess.**
+`since: 2025` matches the earliest content on the site — the oldest post is **2025-08-06** (`pages/posts/shanghai-2025.md:3`); the theme default of `2022` would render a false start year. **Flag this value to the owner as a guess.**
+
+Note too that `locales/zh-CN.yml`'s `intro.*` keys are **not referenced anywhere** in Valaxy, `valaxy-theme-yun`, or `pages/` — see the note under Step 4. Replacing them is source hygiene, not a rendered change.
 
 - [ ] **Step 4: Verify the placeholders are gone**
 
 ```bash
 NODE_OPTIONS=--max-old-space-size=4096 pnpm build
 
-echo "--- scaffold strings in build output (expect none) ---"
-grep -rl 'Valaxy 模版\|Valaxy Theme Yun Preview\|yunyoujun' dist/ || echo "OK: placeholders gone"
+echo "--- scaffold strings in RENDERED output (expect none) ---"
+grep -rl --include='*.html' 'Valaxy 模版\|Valaxy Theme Yun Preview\|yunyoujun' dist/ \
+  || echo "OK: placeholders gone"
 
-echo "--- specifically the sponsor link (expect none) ---"
-grep -rl 'yunyoujun.cn/sponsors' dist/ || echo "OK: no sponsor link"
+echo "--- specifically the sponsor link, rendered (expect none) ---"
+grep -rl --include='*.html' 'yunyoujun.cn/sponsors' dist/ || echo "OK: no sponsor link"
+
+echo "--- positive control: prove the scanner can see a planted match ---"
+echo 'yunyoujun' > dist/__control.html
+grep -rl --include='*.html' 'yunyoujun' dist/ | wc -l   # expect 1
+rm -f dist/__control.html
 
 echo "--- about page built ---"
 ls dist/about/index.html
 ```
 
-Expected: `OK: placeholders gone`, `OK: no sponsor link`, and the about page present.
+Expected: `OK: placeholders gone`, `OK: no sponsor link`, `1` from the control, and the about page present.
 
-**The sweep pattern matters — the original here was a false green.** It searched for `yunyoujun/sponsors` (a slash), but the emitted URL is `yunyoujun.cn/sponsors` (a dot-`.cn`), so it matched nothing while all 23 pages carried the link. Always sweep for the bare domain `yunyoujun`, and back any negative result with a planted-string positive control to prove the scanner actually works.
+**Three traps in this check, all learned the hard way:**
+
+- **The original pattern was a false green.** It searched `yunyoujun/sponsors` (a slash) while the emitted URL is `yunyoujun.cn/sponsors` (a dot-`.cn`), so it matched nothing while every page carried the link. Sweep the bare domain.
+- **Scope the sweep to `*.html`.** Sweeping all of `dist/` matches `dist/assets/theme.*.js` forever — the theme's bundled default config and its `package.json` author metadata (`me@yunyoujun.cn`). That is vendor code and cannot be removed without patching a bundle. An unscoped bare-domain sweep turns a fixed false green into a guaranteed false red; it was observed matching on a correct build.
+- **A negative result is worthless without a positive control.** Plant a matching string, confirm the scanner finds it, then remove it. Without that, "no matches" cannot be distinguished from a broken pattern — which is exactly how the original defect shipped.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add pages/about locales/zh-CN.yml
+git add pages/about locales/zh-CN.yml valaxy.config.ts
 git commit -m "content: replace upstream scaffold placeholders with real site pages
 
-The About page carried Valaxy's author bio and sponsor links."
+The About page carried Valaxy's author bio and sponsor links, and the
+theme's default footer carried a Sponsor YunYouJun donation link."
 ```
 
 ---
