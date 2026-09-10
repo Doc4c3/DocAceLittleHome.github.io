@@ -934,7 +934,9 @@ matters: the original uses Windows backslash paths and one **raw HTML** `<img>`,
 and the Valaxy docs state raw HTML `<a>` links are not base-adjusted, so the
 HTML form must become markdown.
 
-```markdown
+**Write the whole block below as one file.** It is fenced with four backticks because it contains triple-backtick code blocks of its own — those inner fences are part of the post's content and must be written out verbatim.
+
+````markdown
 ---
 title: 流量分析之USB键盘分析
 date: 2025-05-14
@@ -1062,7 +1064,7 @@ emmmmm，好像有了？只能说该有的格式都有了，那再试试栅栏�
 ```
 flag{vig3ne2e_is_c00l}
 ```
-```
+````
 
 - [ ] **Step 3: Rewrite the links page**
 
