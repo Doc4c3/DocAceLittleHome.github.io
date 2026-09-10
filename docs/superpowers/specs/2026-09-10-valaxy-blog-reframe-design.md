@@ -114,7 +114,25 @@ site's dark visual identity onto the new framework.
 | `author.avatar` | *(unset)* | `/images/avatar.png` — new file added to `public/` |
 | `author.email` | *(unset)* | `1255893218@qq.com` |
 | `author.link` | *(unset)* | `https://github.com/Doc4c3` |
-| `social` | RSS / GitHub / Bilibili / E-Mail | unchanged — already correct |
+| `social` | RSS / GitHub / Bilibili / E-Mail | kept, but **two entries fixed** — see below |
+
+**Two social entries needed correcting.** An earlier revision of this spec
+claimed the scaffold's `social` block was "already correct". That was wrong, and
+a task review caught it. The theme emits social links **verbatim, with no base
+handling** — unlike markdown links, which are base-adjusted automatically:
+
+- `RSS` was `link: '/atom.xml'`. Emitted as a root-absolute `href="/atom.xml"`,
+  which on a project-site subpath resolves to
+  `https://doc4c3.github.io/atom.xml` — outside the site — while the real feed
+  is at `.../DocAceLittleHome.github.io/atom.xml`. Becomes
+  `/DocAceLittleHome.github.io/atom.xml`.
+- `E-Mail` was `link: '1255893218@qq.com'`. Emitted as
+  `href="1255893218@qq.com"`, which a browser resolves relative to the current
+  directory and 404s. Becomes `mailto:1255893218@qq.com`.
+
+Both were verified against the built output, not inferred. Any future root-relative
+value placed in `themeConfig` or `siteConfig.social` needs the same treatment —
+`withBase()` does not apply there.
 
 `valaxy.config.ts` gains:
 

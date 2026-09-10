@@ -451,8 +451,10 @@ export default defineSiteConfig({
   },
   social: [
     {
+      // The theme emits social links verbatim, with no base handling, so a
+      // bare '/atom.xml' would resolve outside the project-site subpath.
       name: 'RSS',
-      link: '/atom.xml',
+      link: '/DocAceLittleHome.github.io/atom.xml',
       icon: 'i-ri-rss-line',
       color: 'orange',
     },
@@ -469,8 +471,10 @@ export default defineSiteConfig({
       color: '#FF8EB3',
     },
     {
+      // Must carry a mailto: scheme. The scaffold's bare address renders as a
+      // relative href and 404s.
       name: 'E-Mail',
-      link: '1255893218@qq.com',
+      link: 'mailto:1255893218@qq.com',
       icon: 'i-ri-mail-line',
       color: '#8E71C1',
     },
