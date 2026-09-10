@@ -35,8 +35,8 @@ export default defineValaxyConfig<UserThemeConfig>({
 
     bg_image: {
       enable: true,
-      url: '/bg.webp',
-      dark: '/bg.webp',
+      url: '/DocAceLittleHome.github.io/bg.webp',
+      dark: '/DocAceLittleHome.github.io/bg.webp',
       opacity: 0.15,
     },
 
