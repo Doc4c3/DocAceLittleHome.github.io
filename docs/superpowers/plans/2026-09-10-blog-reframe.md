@@ -1208,6 +1208,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
+        with:
+          # REQUIRED. The action throws "No pnpm version is specified"
+          # when this is absent and package.json has no `packageManager`
+          # field — and it has none. Do not remove.
+          version: 10.33.0
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -1231,27 +1236,64 @@ jobs:
           force_orphan: true
 ```
 
-Keeping `force_orphan: true` matches the scaffold and keeps the generated branch from accumulating history. `pnpm/action-setup@v4` reads the pinned version from `packageManager` if present, otherwise installs current stable; the local toolchain is pnpm 10.33.0.
+Keeping `force_orphan: true` matches the scaffold and keeps the generated branch from accumulating history.
+
+**The `version:` input is mandatory, and an earlier revision of this plan was wrong about that.** It claimed the action "reads the pinned version from `packageManager` if present, otherwise installs current stable." The first half is true; the second is **false**. With no `packageManager` in `package.json` — and this project has none — `pnpm/action-setup@v4` throws rather than falling back, so the job dies at this step before installing anything. The pin matches the local toolchain and the lockfile's `lockfileVersion: '9.0'`.
 
 - [ ] **Step 2: Verify the YAML parses and the key fields are right**
 
 ```bash
-python -c "
-import yaml, sys
+python -X utf8 -c "
+import yaml
 w = yaml.safe_load(open('.github/workflows/gh-pages.yml', encoding='utf-8'))
 assert 'main' in w[True]['push']['branches'], 'main must be a trigger branch'
 steps = w['jobs']['build']['steps']
-assert any('pnpm install' in str(s.get('run','')) for s in steps), 'must use pnpm'
+assert any('pnpm install --frozen-lockfile' in str(s.get('run','')) for s in steps), 'must use pnpm --frozen-lockfile'
 assert any(s.get('with',{}).get('publish_dir') == './dist' for s in steps), 'publish_dir must be ./dist'
-print('workflow OK')
+assert w['permissions'].get('contents') == 'write', 'contents: write missing'
+setup = [s for s in steps if 'pnpm/action-setup' in str(s.get('uses',''))]
+assert setup and setup[0].get('with',{}).get('version'), 'pnpm version input missing - CI would throw'
+print('workflow OK - pnpm pinned to', setup[0]['with']['version'])
 "
 ```
 
-Expected: `workflow OK`.
+Expected: `workflow OK - pnpm pinned to 10.33.0`.
 
-If `yaml` is missing: `uv run --with pyyaml python -c "..."` with the same body.
+If `yaml` is missing: `uv run --with pyyaml python -c "..."` with the same body. Use `python -X utf8` — the file contains emoji in step names, and a Windows Python reading it under a legacy code page will fail with `yaml.reader.ReaderError: unacceptable character`.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 3: Commit the project's build manifest and remaining scaffold files**
+
+**A fresh clone must be able to build**, because that is exactly what CI checks out. An earlier revision of this plan committed only the paths each task named by hand, which left the repository at **97 tracked files** with `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `.npmrc`, `.gitignore`, `pages/404.md`, `pages/archives/index.md`, `pages/categories/index.md`, `pages/tags/index.md`, `locales/en.yml` and the rest **untracked**. CI would have failed on `ERR_PNPM_NO_LOCKFILE` — and there was no manifest to install from at all.
+
+`git add -A` is safe here because `.gitignore` already excludes every generated path (`node_modules`, `dist`, `dist-ssr`, `.vite-ssg-*`, `temp/`, `components.d.ts`, `*.log`, `.env*`, `valaxy-fuse-list.json`) and the build-generated `public/feed.xml|atom.xml|feed.json`. Do not edit `.gitignore`.
+
+```bash
+git add -A
+echo "--- nothing ignored may be staged (expect OK) ---"
+git diff --cached --name-only | grep -E '^node_modules/|^dist/|^\.vite-ssg|feed\.(xml|json)|atom\.xml' || echo "OK"
+echo "--- the manifest must be staged (expect all five) ---"
+git diff --cached --name-only | grep -E '^(package\.json|pnpm-lock\.yaml|tsconfig\.json|\.gitignore|\.npmrc)$'
+git commit -m "fix: commit the project manifest and scaffold files CI needs to build"
+```
+
+Then prove the repository is self-sufficient — this is the check that matters:
+
+```bash
+echo "--- untracked, non-ignored files (expect 0) ---"
+git status --porcelain -uall | awk '$1=="??"' | wc -l
+
+echo "--- a fresh clone gets what it needs ---"
+tmp=$(mktemp -d); git archive HEAD | tar -x -C "$tmp"
+test -f "$tmp/package.json" && test -f "$tmp/pnpm-lock.yaml" \
+  && echo "OK: manifest present in a fresh clone" || echo "FAIL: manifest missing"
+ls "$tmp/pages/archives/index.md" "$tmp/pages/tags/index.md" \
+   "$tmp/pages/categories/index.md" "$tmp/pages/404.md"
+rm -rf "$tmp"
+```
+
+Expected: `0`, `OK: manifest present in a fresh clone`, and all four page files listed.
+
+- [ ] **Step 4: Commit the workflow**
 
 ```bash
 git add .github/workflows/gh-pages.yml
