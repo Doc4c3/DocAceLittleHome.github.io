@@ -38,13 +38,45 @@ links:
     url: https://github.com/Doc4c3/faster-MD5
     desc: 超大文件 md5 值计算脚本
 
-friends: []
+friends:
+  - name: Marin
+    blog: Marin
+    url: https://wwwmarin.xyz/
+    desc: 我的好学长，引路人
+  - name: btop251
+    blog: btop251
+    url: https://blog.btop251.top/
+  - name: leyi
+    blog: leyi
+    url: https://leyi.live/
+    desc: 学弟 pubg战神
+  - name: decimo
+    blog: decimo
+    url: https://decimo.top/
+    desc: 爱打游戏的学弟
+  - name: qsdz
+    blog: qsdz
+    url: https://hasegawaazusa.github.io/
+    desc: 传说中的宗门长老
+  - name: 9c
+    blog: 9c
+    url: https://cauliweak9.github.io/
+    desc: 可爱学长一枚
+  - name: Triode
+    blog: Triode
+    url: https://triodelzx.github.io/
+    desc: 书记神
+  - name: Err0r233
+    blog: Err0r233
+    url: https://err0r233.github.io/
+    desc: 前会长强强
 ---
+
+## 友链
+
+<YunLinks :links="frontmatter.friends" :random="frontmatter.random" />
 
 ## 常用链接
 
 <YunLinks :links="frontmatter.links" :random="frontmatter.random" />
 
-## 友链
-
-<YunLinks :links="frontmatter.friends" :random="frontmatter.random" />
