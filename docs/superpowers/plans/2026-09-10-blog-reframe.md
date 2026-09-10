@@ -698,6 +698,20 @@ html.dark {
 }
 ```
 
+**The first line of this file must also pull in the colour overrides:**
+
+```scss
+// css-vars.scss is NOT auto-loaded — see below.
+@use './css-vars.scss';
+```
+
+**Corrections measured against a real green build on 2026-09-10.** Two assumptions in this plan were wrong; both were caught during execution and are recorded here so they are not reintroduced:
+
+- **`styles/css-vars.scss` is not auto-loaded, despite what the scaffold README claims.** Valaxy imports only `styles/index.{ts,css,scss}` (`node_modules/valaxy/dist/shared/valaxy.Cb_HdczD.mjs:4488`), and a full-text search of the Valaxy bundle finds **zero** occurrences of `css-vars`. Without the `@use` line above, Step 3's colour overrides are silently absent from the built CSS — no error, no warning, just the theme's default `#1a1a1d`, which looks plausible enough to pass a casual glance. Verify the cascade won: `--va-c-bg:#000` must appear **after** the theme's `--va-c-bg:#1a1a1d` in the emitted CSS. Keeping the two concerns in separate files is still the right split; the entry point just has to import the second one.
+- **`bg_image.url` is not base-adjusted either.** The theme injects the config value straight into `url('${url}')` with no `withBase()` (`valaxy-theme-yun/components/YunBg.vue:26`), the same defect class as the RSS social link. A bare `/bg.webp` resolves to `https://doc4c3.github.io/bg.webp` on the deployed subpath → 404 → no background. Both `bg_image.url` and `bg_image.dark` must therefore be `/DocAceLittleHome.github.io/bg.webp`. Task 3's config block still shows the bare form; treat this note as authoritative.
+
+**Anything root-relative in `siteConfig` or `themeConfig` needs the base prefix written by hand.** Only markdown links are base-adjusted automatically.
+
 - [ ] **Step 5: Rebuild and verify the fonts survived**
 
 ```bash
@@ -707,16 +721,23 @@ echo "--- where did the CSS land? ---"
 find dist -name '*.css' | head
 
 echo "--- digits-only face present in built CSS (expect a match) ---"
-grep -rl 'U+0030-0039' dist/ || echo "FAIL: unicode-range face was dropped"
+grep -rho 'unicode-range:[^;}]*' dist/ | sort -u
 
-echo "--- font files emitted (expect 3) ---"
-find dist \( -name '*.otf' -o -name '*.ttf' \) | wc -l
+echo "--- font files emitted ---"
+find dist \( -name '*.otf' -o -name '*.ttf' \) | sed 's|.*/||' | sort
 
 echo "--- background image emitted ---"
 find dist -name 'bg.webp'
 ```
 
-Expected: a match for `U+0030-0039`; **3** font files; `dist/bg.webp` present. Vite can tree-shake unused font assets, which is why this is asserted rather than assumed. Search all of `dist/` rather than `dist/assets/` — the CSS directory name is Vite's choice, not ours, so hardcoding it risks a false failure.
+Expected: a `unicode-range:U+30-39` line; `Bender.otf` plus both Novecento files present; `dist/bg.webp` present.
+
+**Two corrections measured against a real green build on 2026-09-10** — the original assertions here were wrong and would have produced false failures:
+
+- **Do not grep for the literal `U+0030-0039`.** lightningcss canonicalises the range when it minifies, so the built CSS contains `unicode-range:U+30-39`. That is the identical range (48–57) — eight digits, 0 through 9 — just written without zero-padding. Grep for `U+30-39`, or better, dump all `unicode-range` values and read them.
+- **Do not assert `3` font files.** The count is **23**: the theme bundles 20 KaTeX fonts (`KaTeX_*.ttf`) for math rendering. Assert that `Bender.otf` and the two Novecento files are present instead of asserting a total.
+
+Also note `dist/bg.webp` existing proves only that the file was emitted — see Step 3's note on the base prefix for what actually matters.
 
 - [ ] **Step 6: Commit**
 
@@ -1041,6 +1062,25 @@ ls -la public/images/avatar.png
 ```
 
 Expected: a non-zero PNG. If the GitHub avatar is unavailable, any square image will do — this is the only asset the plan does not source from the old repo or local disk.
+
+**You must also base-prefix the avatar path in `site.config.ts`.** Measured against a real build on 2026-09-10: `author.avatar: '/images/avatar.png'` is emitted as a **bare** `<img src="/images/avatar.png">` in 20 built pages, with zero base-prefixed forms. The absolute `https://doc4c3.github.io/DocAceLittleHome.github.io/images/avatar.png` does appear, but only inside meta/JSON-LD tags — the visible `<img>` is the bare one. On the deployed subpath a bare `/images/avatar.png` resolves to `https://doc4c3.github.io/images/avatar.png` → 404 → no avatar. This is the same defect class as the RSS social link fixed in Task 3.
+
+Change that one value in `site.config.ts` to:
+
+```ts
+avatar: '/DocAceLittleHome.github.io/images/avatar.png',
+```
+
+Then confirm the bare form is gone:
+
+```bash
+echo "--- bare avatar src (expect none) ---"
+grep -rc 'src="/images/avatar\.png"' dist/ | grep -v ':0' || echo "OK: no bare avatar src"
+echo "--- prefixed avatar src present (expect a count) ---"
+grep -ro 'src="/DocAceLittleHome.github.io/images/avatar\.png"' dist/ | wc -l
+```
+
+Add `site.config.ts` to this task's commit.
 
 - [ ] **Step 5: Rebuild and verify**
 
