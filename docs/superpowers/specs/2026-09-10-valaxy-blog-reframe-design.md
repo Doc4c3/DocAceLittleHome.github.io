@@ -78,6 +78,23 @@ site's dark visual identity onto the new framework.
    contains no `index.html` (it is generated at build time). Pages serves `main`'s
    root today, so once source lands there the URL 404s until Pages is repointed
    *and* `gh-pages` is populated.
+6. **The build does not currently succeed.** `pnpm build` fails with
+   `[PARSE_ERROR] '0'-prefixed octal literals and octal escape sequences are
+   deprecated`, one error per Windows-backslash image path. Markdown image paths
+   are compiled into JS `import` statements, so `\1`, `\U` etc. inside
+   `C:\Users\...` are read as JavaScript escape sequences and the generated module
+   is syntactically invalid. All **62 refs across 7 posts** are affected. `dist/`
+   ends up with only `feed.xml` and no `index.html`.
+   A second error follows in the `build:after` hook —
+   `TypeError: Cannot read properties of undefined (reading 'replace')` inside
+   `xml-js`'s `writeCdata`, reached from `feed` generating the RSS feed. This may
+   be a cascade from the failed build; it should be re-checked once the parse
+   errors are gone.
+
+   Consequence for planning: the build cannot be used as a per-task check until
+   both the image paths and the missing frontmatter are fixed. There is no unit
+   test framework in this project, so task verification is by build, built-artifact
+   assertions, and live HTTP checks.
 
 ## Design
 
@@ -182,6 +199,19 @@ names and the meaningless Typora names; per-post folders make collisions
 impossible. Refs become root-absolute `/images/posts/<slug>/NN.png`, which the
 docs confirm is base-adjusted automatically *for markdown images*.
 
+**61 of 62 are present on local disk. One is unrecoverable.** Correcting an
+earlier error in this spec: the missing file is
+`87fa1e7675cf88f9b93434fff86853c0.jpg` in the **上海市赛** post
+(`第十届上海市大学生网络安全大赛WriteUp.md:98`), inside the `easy_misc` section
+— a WeChat temp file for a QR-code screenshot, deleted from
+`xwechat_files\...\temp\RWTemp\`. It is **not** the old repo's
+`history/md源文件/微信图片_20250514131630.jpg`; that image belongs to the USB
+writeup, which is a different post and a different competition. The two were
+conflated in an earlier revision.
+
+Handling: replace that one reference with a visible placeholder line rather than
+shipping a broken `<img>`. Author may re-supply the file.
+
 **Fonts and background**, sourced from the old repo via raw GitHub URLs:
 
 - `font/Bender.otf`, `font/Novecento-Wide-Bold-2.otf`,
@@ -189,9 +219,10 @@ docs confirm is base-adjusted automatically *for markdown images*.
 - `8f8a8af6d4afbc463b4b43460df474493d0c6123.png` (**5.45 MB**) → converted to
   WebP before shipping. This is the largest asset on the site by an order of
   magnitude.
-- Also fetched from the old repo: `history/流量分析之usb键盘分析.pdf`, the 8 USB
-  screenshots, and `history/md源文件/微信图片_20250514131630.jpg` — the latter is
-  the one image missing from local disk.
+- Also fetched from the old repo, for the migrated USB writeup:
+  `history/流量分析之usb键盘分析.pdf`, its 8 screenshots, and
+  `history/md源文件/微信图片_20250514131630.jpg`. None of these exist on local
+  disk — they live only in the old repo.
 
 #### Typography
 
