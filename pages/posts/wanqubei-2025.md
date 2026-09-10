@@ -18,7 +18,7 @@ tags:
 
 #### checkwebshell
 
-![image-20250908162016316](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20250908162016316.png)
+![image-20250908162016316](/images/posts/wanqubei-2025/01.png)
 
 逐个流量包看
 
@@ -174,4 +174,4 @@ try {
 ```
 
 以上为解密文本
-![image-20250908163022240](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20250908163022240.png)
+![image-20250908163022240](/images/posts/wanqubei-2025/02.png)

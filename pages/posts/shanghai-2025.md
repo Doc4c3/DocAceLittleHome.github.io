@@ -16,35 +16,35 @@ tags:
 
 上来先看来一下http报文，在最后一个包发现了server_key.txt的内容
 
-![屏幕截图 2025-08-06 101854](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 101854.png)
+![屏幕截图 2025-08-06 101854](/images/posts/shanghai-2025/01.png)
 
-![屏幕截图 2025-08-06 092237](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 092237.png)
+![屏幕截图 2025-08-06 092237](/images/posts/shanghai-2025/02.png)
 
-![屏幕截图 2025-08-06 102101](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 102101.png)
+![屏幕截图 2025-08-06 102101](/images/posts/shanghai-2025/03.png)
 
 配置好了发现上传的是一个压缩包，有密码，看了看pcapng的文件注释发现在dns里有线索
 
-![屏幕截图 2025-08-06 101553](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 101553.png)
+![屏幕截图 2025-08-06 101553](/images/posts/shanghai-2025/04.png)
 
-![屏幕截图 2025-08-06 100708](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 100708.png)
+![屏幕截图 2025-08-06 100708](/images/posts/shanghai-2025/05.png)
 
-![屏幕截图 2025-08-06 102320](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 102320.png)
+![屏幕截图 2025-08-06 102320](/images/posts/shanghai-2025/06.png)
 
 找到压缩包密码PanShi2025
 
 解压得到一只马的图片，发现他的高被修改过，改回来得到flag
 
-![屏幕截图 2025-08-06 102544](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 102544.png)
+![屏幕截图 2025-08-06 102544](/images/posts/shanghai-2025/07.png)
 
-![屏幕截图 2025-08-06 101428](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 101428.png)
+![屏幕截图 2025-08-06 101428](/images/posts/shanghai-2025/08.png)
 
 ### 两个数字
 
 先是一串二进制
 
-![屏幕截图 2025-08-06 113548](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 113548.png)
+![屏幕截图 2025-08-06 113548](/images/posts/shanghai-2025/09.png)
 
-![屏幕截图 2025-08-06 113526](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 113526.png)
+![屏幕截图 2025-08-06 113526](/images/posts/shanghai-2025/10.png)
 
 看注释提示8bit，那就试试先reverse再补到八位，再转ascii
 
@@ -87,13 +87,13 @@ print(ascii_string)
 
 ```
 
-![屏幕截图 2025-08-06 113537](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 113537.png)
+![屏幕截图 2025-08-06 113537](/images/posts/shanghai-2025/11.png)
 
 得到密码C0ngr4tu1ation!!Y0u_hav3_passed_th3_first_l3ve1!!
 
-![屏幕截图 2025-08-06 114147](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 114147.png)
+![屏幕截图 2025-08-06 114147](/images/posts/shanghai-2025/12.png)
 
-![屏幕截图 2025-08-06 114224](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 114224.png)
+![屏幕截图 2025-08-06 114224](/images/posts/shanghai-2025/13.png)
 
 格雷码，
 
@@ -101,15 +101,15 @@ print(ascii_string)
 
 先拿到一个残缺的二维码，想着去补全
 
-![屏幕截图 2025-08-06 141248](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 141248.png)
+![屏幕截图 2025-08-06 141248](/images/posts/shanghai-2025/14.png)
 
-![屏幕截图 2025-08-06 142330](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 142330.png)
+![屏幕截图 2025-08-06 142330](/images/posts/shanghai-2025/15.png)
 
-![87fa1e7675cf88f9b93434fff86853c0](C:\Users\12558\xwechat_files\wxid_f4iiuevbfelp22_9271\temp\RWTemp\2025-08\9e20f478899dc29eb19741386f9343c8\87fa1e7675cf88f9b93434fff86853c0.jpg)
+> 图片缺失：原图为微信临时文件，已被清理，无法恢复。
 
 cao，被骗了，010看看，发现了有个压缩包在末尾
 
-![屏幕截图 2025-08-06 142520](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 142520.png)
+![屏幕截图 2025-08-06 142520](/images/posts/shanghai-2025/16.png)
 
 解压得到了一个Ook brainfuck
 
@@ -154,7 +154,7 @@ Ook.
 
 解密得到
 
-![屏幕截图 2025-08-06 143030](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 143030.png)
+![屏幕截图 2025-08-06 143030](/images/posts/shanghai-2025/17.png)
 
 ```
 y0u_c@t_m3!!!
@@ -164,4 +164,4 @@ y0u_c@t_m3!!!
 
 得到flag
 
-![屏幕截图 2025-08-06 143622](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-08-06 143622.png)
+![屏幕截图 2025-08-06 143622](/images/posts/shanghai-2025/18.png)

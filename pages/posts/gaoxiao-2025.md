@@ -18,7 +18,7 @@ tags:
 
 要知道服务器rootfs采用的文件系统格式，就去etc/下的fstab里面看
 
-![image-20251020202910742](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020202910742.png)
+![image-20251020202910742](/images/posts/gaoxiao-2025/01.png)
 
 发现是xfs，提交flag，成功
 
@@ -26,7 +26,7 @@ tags:
 
 AI诈骗站点的域名，直接看火眼的分析界面的Nginx服务器栏
 
-![image-20251020203104348](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020203104348.png)
+![image-20251020203104348](/images/posts/gaoxiao-2025/02.png)
 
 发现是y8fmin.wf941021.org
 
@@ -42,13 +42,13 @@ AI诈骗站点的域名，直接看火眼的分析界面的Nginx服务器栏
 class AIClient:    def __init__(self, url, cred):        self.url = url        self.cred = cred    def chat(self, history: list[dict[str, str]], message: str) -> str:        messages = history.copy()        messages.append({"role": "user", "content": message})        payload = {            "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",            "messages": messages,        }        headers = {            "Authorization": f"Bearer {self.cred}",            "Content-Type": "application/json",        }
 ```
 
-![image-20251020203841930](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020203841930.png)
+![image-20251020203841930](/images/posts/gaoxiao-2025/03.png)
 
 发现用的是Qwen3-30B-A3B-Instruct-2507
 
 #### flag 5：
 
-找操作系统日志外发的服务器IP地址，那就去检查系统中配置的日志转发服务记录，直接搜索rsyslog，然后一个一个看![image-20251020204151113](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020204151113.png)
+找操作系统日志外发的服务器IP地址，那就去检查系统中配置的日志转发服务记录，直接搜索rsyslog，然后一个一个看![image-20251020204151113](/images/posts/gaoxiao-2025/04.png)
 
 最后发现日志外发服务器IP地址：**10.0.38.211**
 
@@ -62,7 +62,7 @@ with open("/app/.ak", "r") as f:    API_KEY = json.loads(f.read())["ak"]
 
 那就知道**密钥文件**：`/app/.ak`
 
-![image-20251020204706559](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020204706559.png)
+![image-20251020204706559](/images/posts/gaoxiao-2025/05.png)
 
 得到密钥：an-m2h0xum6l59cgmx7hy3ctolligvkf
 
@@ -70,7 +70,7 @@ with open("/app/.ak", "r") as f:    API_KEY = json.loads(f.read())["ak"]
 
 #### flag 1：
 
-![屏幕截图 2025-10-20 202101](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-10-20 202101.png)
+![屏幕截图 2025-10-20 202101](/images/posts/gaoxiao-2025/06.png)
 
 根据分区表的信息推理其文件系统可能名为zfs
 
@@ -86,35 +86,35 @@ with open("/app/.ak", "r") as f:    API_KEY = json.loads(f.read())["ak"]
 
 Linux环境很简单，先去找到berserker的用户，在他的user底下搜索appdata，找到了OpenSuse
 
-![image-20251020205834672](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020205834672.png)
+![image-20251020205834672](/images/posts/gaoxiao-2025/07.png)
 
 #### flag 3（疑问）：
 
 去桌面把fit拉出来，丢到fit file viewer（[FIT File Viewer](https://www.fitfileviewer.com/)），自动修复
 
-![image-20251020210123551](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020210123551.png)
+![image-20251020210123551](/images/posts/gaoxiao-2025/08.png)
 
 下载之后改成一样的名字，cyberchef取个SM3值，提交flag发现不对，后面又试了几种改发，都没成功
 
-![image-20251020210704301](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020210704301.png)
+![image-20251020210704301](/images/posts/gaoxiao-2025/09.png)
 
 #### flag 4：
 
 下载记录表格
 
-![image-20251020210945786](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020210945786.png)
+![image-20251020210945786](/images/posts/gaoxiao-2025/10.png)
 
 降序排列
 
-![image-20251020211113530](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020211113530.png)
+![image-20251020211113530](/images/posts/gaoxiao-2025/11.png)
 
 26.603m/s=95.7708km/s~=95.77km/s
 
-![image-20251020211234225](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020211234225.png)
+![image-20251020211234225](/images/posts/gaoxiao-2025/12.png)
 
 #### flag 5：
 
-![image-20251020211332034](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020211332034.png)
+![image-20251020211332034](/images/posts/gaoxiao-2025/13.png)
 
 该设备的制造商名称为 strava
 
@@ -122,13 +122,13 @@ Linux环境很简单，先去找到berserker的用户，在他的user底下搜�
 
 #### flag 1：
 
-从浏览器中提取dsm的设备名，如图：![image-20251020212030107](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020212030107.png)
+从浏览器中提取dsm的设备名，如图：![image-20251020212030107](/images/posts/gaoxiao-2025/14.png)
 
 catdiskrecorder
 
 #### flag 2：
 
-从系统中提取群晖smb共享的密码，直接在火眼Linux基本信息的历史命令中找到![image-20251020213449395](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020213449395.png)
+从系统中提取群晖smb共享的密码，直接在火眼Linux基本信息的历史命令中找到![image-20251020213449395](/images/posts/gaoxiao-2025/15.png)
 
 SMB_PASSWORD=6CzRWsUNYUpp
 
@@ -136,6 +136,6 @@ SMB_PASSWORD=6CzRWsUNYUpp
 
 直接利用火眼创立时间线，时间排序，只看检材2-2群晖系统，发现三个主要时间段，1970，2018，2025。1970年的是出厂设置文件，2018年和2025年分别取一个最早时间，最后发现是2025年。
 
-![image-20251020214055101](C:\Users\12558\AppData\Roaming\Typora\typora-user-images\image-20251020214055101.png)
+![image-20251020214055101](/images/posts/gaoxiao-2025/16.png)
 
 2025-10-12 22:16

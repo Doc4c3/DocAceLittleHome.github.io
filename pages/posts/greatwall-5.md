@@ -196,9 +196,9 @@ print("请在训练脚本的输出中查找保存模型文件位置，或按项�
 
 ```
 
-![屏幕截图 2025-09-14 102708](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-09-14 102708.png)
+![屏幕截图 2025-09-14 102708](/images/posts/greatwall-5/01.png)
 
-![屏幕截图 2025-09-14 101738](C:\Users\12558\Pictures\Screenshots\屏幕截图 2025-09-14 101738.png)
+![屏幕截图 2025-09-14 101738](/images/posts/greatwall-5/02.png)
 
 结束
 

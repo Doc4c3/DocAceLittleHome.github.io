@@ -12,30 +12,30 @@ tags:
 
 2.分析刘洋liuyang_pc.E01检材，计算机系统Build版本为？[答案格式：19000]
 
-![屏幕截图 2026-05-10 143853](C:\Users\12558\Pictures\Screenshots\屏幕截图 2026-05-10 143853.png)
+![屏幕截图 2026-05-10 143853](/images/posts/pangushi-da/01.png)
 
 3.分析刘洋liuyang_pc.E01检材，计算机最后一次正常关机的时间为？UTC +0[答案格式：2025-05-06-09:00:00]
 
-![屏幕截图 2026-05-10 143844](C:\Users\12558\Pictures\Screenshots\屏幕截图 2026-05-10 143844.png)
+![屏幕截图 2026-05-10 143844](/images/posts/pangushi-da/02.png)
 
 4.分析刘洋liuyang_pc.E01检材，计算机网卡的MAC地址为？[答案格式：00-0B-00-A0-00-00]
 
-![屏幕截图 2026-05-10 143937](C:\Users\12558\Pictures\Screenshots\屏幕截图 2026-05-10 143937.png)
+![屏幕截图 2026-05-10 143937](/images/posts/pangushi-da/03.png)
 
 5.分析刘洋liuyang_pc.E01检材，分析机主是从那里下载的typora？[答案格式：阿里云]
-![屏幕截图 2026-05-10 144544](C:\Users\12558\Pictures\Screenshots\屏幕截图 2026-05-10 144544.png)
+![屏幕截图 2026-05-10 144544](/images/posts/pangushi-da/04.png)
 
 6.分析刘洋liuyang_pc.E01检材，刘洋在2026-04-19 13:46:01（UTC +0）曾访问过百度云盘，请给云盘的打开密码？[答案格式：11aa]
 
-![屏幕截图 2026-05-10 145135](C:\Users\12558\Pictures\Screenshots\屏幕截图 2026-05-10 145135.png)
+![屏幕截图 2026-05-10 145135](/images/posts/pangushi-da/05.png)
 
 7.分析刘洋liuyang_pc.E01检材，请给出刘洋管理pve集群所用的端口号？[答案格式:8000]
 
-![屏幕截图 2026-05-10 145419](C:\Users\12558\Pictures\Screenshots\屏幕截图 2026-05-10 145419.png)
+![屏幕截图 2026-05-10 145419](/images/posts/pangushi-da/06.png)
 
 9.分析刘洋liuyang_pc.E01检材，请给出理财网站的IP地址？[答案格式:127.0.0.1]
 
-![屏幕截图 2026-05-10 151912](C:\Users\12558\Pictures\Screenshots\屏幕截图 2026-05-10 151912.png)
+![屏幕截图 2026-05-10 151912](/images/posts/pangushi-da/07.png)
 
 # 移动介质取证
 
