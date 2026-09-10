@@ -109,12 +109,42 @@ site's dark visual identity onto the new framework.
 | `subtitle` | *(unset)* | `mostly about CTFs and hacking` |
 | `description` | `Valaxy Theme Yun Preview.` | `CTFer(misc and web) and SRC researcher` |
 | `timezone` | *(unset)* | `Asia/Hong_Kong` |
-| `mode` | *(unset → auto)* | `dark` |
+| `mode` | *(unset → auto)* | **`auto`**, with `valaxyDarkOptions.useDarkOptions.initialValue: 'dark'` — see below |
 | `author.name` | `DocAcer` | unchanged |
 | `author.avatar` | *(unset)* | `/images/avatar.png` — new file added to `public/` |
 | `author.email` | *(unset)* | `1255893218@qq.com` |
 | `author.link` | *(unset)* | `https://github.com/Doc4c3` |
 | `social` | RSS / GitHub / Bilibili / E-Mail | kept, but **two entries fixed** — see below |
+
+**`mode` does not mean what an earlier revision of this spec assumed.** Setting
+`mode: 'dark'` does **not** force dark mode, and this was the most serious defect
+found in the whole build. `siteConfig.mode` has exactly one consumer in the
+installed tree — `if (config.siteConfig.mode === "auto")`
+(`node_modules/valaxy/dist/shared/valaxy.Cb_HdczD.mjs:650`) — with **no branch for
+`'dark'`**. The dark class is applied at runtime from
+`useValaxyDark(themeConfig.valaxyDarkOptions)` → `useDark(options.useDarkOptions)`,
+whose defaults follow the visitor's OS `prefers-color-scheme`. Worse, because
+`mode !== 'auto'` Valaxy emits *neither* the inline critical CSS nor the
+pre-script, so a first visit from a light-mode machine painted the entire site
+**white** — the colour port reduced to a pink accent on the theme's default
+background.
+
+The working combination is `mode: 'auto'` (which turns those two head fragments
+back on) **plus** `valaxyDarkOptions: { useDarkOptions: { initialValue: 'dark' } }`
+in `themeConfig` (which supplies the dark state). Residual: on the very first
+visit from a light-OS browser the emitted inline script still falls back to
+`'auto'`, so that single paint is white until hydration. Every visit thereafter
+is dark pre-hydration, and even the first is dark pre-hydration on a dark-OS
+machine.
+
+**The typography knobs row further down is also incomplete.** The wordmark does
+**not** come from `--va-font-sans`, and the `--yun-home-hero-name-color` knob
+named below styles `.clip` in `YunHomeHero` — a component this site never
+renders. The banner title is `YunBanner`'s `.char`, whose font is
+`--va-font-serif`, and the theme hardcodes a Google Fonts request
+(`valaxy-theme-yun/App.vue:22`, `Noto Serif SC:wght@900`) to feed it. That
+override is therefore required for the wordmark to honour Novecento at all. It
+does not remove the third-party request; only a head override would.
 
 **Two social entries needed correcting.** An earlier revision of this spec
 claimed the scaffold's `social` block was "already correct". That was wrong, and
