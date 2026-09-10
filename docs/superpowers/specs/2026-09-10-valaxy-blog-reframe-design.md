@@ -24,6 +24,7 @@ site's dark visual identity onto the new framework.
 | 7 | Deployment mechanism | `main` = source, `gh-pages` = site, seeded before source lands |
 | 8 | Category scheme | Exactly three site-wide: `CTF`, `SRC`, `Learning` |
 | 9 | Learning-material migration | Deferred to a follow-up session (see Out of scope) |
+| 10 | Chinese (CJK) font | System stack — zero download cost, appearance varies by reader OS |
 
 ## Current state
 
@@ -183,8 +184,7 @@ docs confirm is base-adjusted automatically *for markdown images*.
 **Fonts and background**, sourced from the old repo via raw GitHub URLs:
 
 - `font/Bender.otf`, `font/Novecento-Wide-Bold-2.otf`,
-  `font/Novecento-wide-Normal-2.ttf` → `public/fonts/`, declared with
-  `@font-face` in `styles/index.scss`.
+  `font/Novecento-wide-Normal-2.ttf` → `public/fonts/`. Typography scheme below.
 - `8f8a8af6d4afbc463b4b43460df474493d0c6123.png` (**5.45 MB**) → converted to
   WebP before shipping. This is the largest asset on the site by an order of
   magnitude.
@@ -192,14 +192,52 @@ docs confirm is base-adjusted automatically *for markdown images*.
   screenshots, and `history/md源文件/微信图片_20250514131630.jpg` — the latter is
   the one image missing from local disk.
 
+#### Typography
+
+Glyph coverage was measured directly from the font tables, not assumed:
+
+| Font | digits 0-9 | A-Z / a-z | CJK hanzi |
+|---|---|---|---|
+| `Bender.otf` | 10/10 | 26/26 | **0** |
+| `Novecento-Wide-Bold-2.otf` | 10/10 | 26/26 | **0** |
+| `Novecento-wide-Normal-2.ttf` | 10/10 | 26/26 | **0** |
+
+Two consequences drive the implementation:
+
+1. **Bender for digits requires `unicode-range`, not font stack order.** All
+   three fonts contain digits, and CSS fallback is first-match-wins per glyph, so
+   putting `'Bender'` after `'Novecento Wide'` would leave digits in Novecento.
+   Declaring a digits-only face and placing it *first* is what makes it work:
+
+   ```css
+   @font-face {
+     font-family: 'Bender Digits';
+     src: url('/fonts/Bender.otf') format('opentype');
+     unicode-range: U+0030-0039;   /* 0-9 only */
+   }
+   /* digits resolve to Bender; every other glyph falls through */
+   --va-font-sans: 'Bender Digits', 'Novecento Wide', 'Microsoft YaHei',
+                   'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', sans-serif;
+   ```
+
+2. **Novecento cannot render Chinese** — zero hanzi, zero CJK punctuation. All
+   CJK goes through the system stack named above. Accepted trade-off (decision
+   10): zero download cost, but Chinese appearance varies by reader OS and none
+   of those faces match Novecento's condensed wide style.
+
+`@font-face` must assign our own family name and weight per file. The two
+Novecento files declare **different embedded family names** — `"Novecento wide"`
+(bold) and `"Novecento wide Normal"` (regular) — so relying on the embedded names
+would yield a regular-weight bold. Declare both under one family name
+(`'Novecento Wide'`) with explicit `font-weight: 400` and `700`.
+
 **Theme wiring.** The Yun theme already exposes the needed knobs:
 
 | Old site | Yun knob | Value |
 |---|---|---|
 | black background | `styles/css-vars.scss` → `--va-c-bg` (+ `--va-c-bg-soft`, `--va-c-bg-light`) | `#000`; theme default is `#1a1a1d` |
 | pink hover | `themeConfig.colors.primary` | `#FFC0CB`; default `#0078E7` |
-| Novecento Wide | `--va-font-sans` | `'Novecento Wide', sans-serif` |
-| Bender | `--va-font-mono` | `'Bender', monospace` |
+| typography | `--va-font-sans` / `--va-font-mono` | stack as given above; mono stays available for code blocks |
 | background image | `themeConfig.bg_image` | `{ enable: true, url: '/bg.webp', dark: '/bg.webp', opacity: 0.15 }` — opacity is a judgement call, tune on first render |
 | "DA's BLOG" wordmark | `banner.title` + `--yun-home-hero-name-color` | title as-is; colour `#fff` |
 
@@ -255,7 +293,10 @@ In order:
 3. No post route in the built output contains `:` — proves the bracket defect is
    gone.
 4. All post image paths resolve inside `dist/`.
-5. After deploy, fetch the live URL and confirm 200 for: the home page, one post
+5. The built CSS contains a `@font-face` with `unicode-range: U+0030-0039`, and
+   all three font files are present in `dist/` — proves the digits-only face
+   survived the build rather than being tree-shaken.
+6. After deploy, fetch the live URL and confirm 200 for: the home page, one post
    page, one migrated image, and the USB PDF.
 
 ## Out of scope
@@ -286,3 +327,5 @@ In order:
 | 5.45 MB background left uncompressed | Converted to WebP; verified by checking the emitted file size |
 | Inferred dates are wrong | Both soft dates flagged in §2 for correction before frontmatter is written |
 | WebP conversion tooling unavailable locally | Check before committing to it; fall back to a resized PNG and record the size |
+| Chinese renders differently per reader OS | Accepted trade-off of decision 10. If it looks wrong on other devices, revisit by bundling a subsetted CJK font — the stack is a one-line change |
+| Digits-only `unicode-range` face ignored or tree-shaken | Verification step 5 asserts the face and all three font files survive into `dist/` |
