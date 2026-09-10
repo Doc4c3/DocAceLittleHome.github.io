@@ -800,19 +800,60 @@ intro:
   hi: 你好
 ```
 
+- [ ] **Step 3b: Remove the theme's footer sponsor link**
+
+`valaxy.config.ts` currently has no `footer` override, so the theme's *default* footer renders on every page:
+
+```ts
+// node_modules/valaxy-theme-yun/node/config.ts:60-70
+footer: {
+  icon: {
+    enable: true,
+    url: 'https://www.yunyoujun.cn/sponsors/',
+    title: 'Sponsor YunYouJun',
+  },
+  powered: true,
+  since: 2022,
+},
+```
+
+That is a **donation link to Valaxy's author** appearing on every page of this blog — the same class of upstream artifact as the About-page bio removed in Step 1. Measured on a green build: all **23** built HTML files carried `href="https://www.yunyoujun.cn/sponsors/"`.
+
+Add a `footer` block to `themeConfig` in `valaxy.config.ts`:
+
+```ts
+    footer: {
+      // The theme defaults to a "Sponsor YunYouJun" donation link in the
+      // footer icon. It is upstream branding, not this blog's.
+      icon: {
+        enable: false,
+      },
+      since: 2025,
+    },
+```
+
+`powered: true` is deliberately left alone — a theme credit is normal and appropriate, and removing it is the owner's call, not this plan's.
+
+`since: 2025` matches the earliest content on the site (the oldest post is 2025-05); the theme default of `2022` would render a false start year. **Flag this value to the owner as a guess.**
+
 - [ ] **Step 4: Verify the placeholders are gone**
 
 ```bash
 NODE_OPTIONS=--max-old-space-size=4096 pnpm build
 
 echo "--- scaffold strings in build output (expect none) ---"
-grep -rl 'Valaxy 模版\|Valaxy Theme Yun Preview\|yunyoujun/sponsors' dist/ || echo "OK: placeholders gone"
+grep -rl 'Valaxy 模版\|Valaxy Theme Yun Preview\|yunyoujun' dist/ || echo "OK: placeholders gone"
+
+echo "--- specifically the sponsor link (expect none) ---"
+grep -rl 'yunyoujun.cn/sponsors' dist/ || echo "OK: no sponsor link"
 
 echo "--- about page built ---"
 ls dist/about/index.html
 ```
 
-Expected: `OK: placeholders gone` and the about page present.
+Expected: `OK: placeholders gone`, `OK: no sponsor link`, and the about page present.
+
+**The sweep pattern matters — the original here was a false green.** It searched for `yunyoujun/sponsors` (a slash), but the emitted URL is `yunyoujun.cn/sponsors` (a dot-`.cn`), so it matched nothing while all 23 pages carried the link. Always sweep for the bare domain `yunyoujun`, and back any negative result with a planted-string positive control to prove the scanner actually works.
 
 - [ ] **Step 5: Commit**
 
