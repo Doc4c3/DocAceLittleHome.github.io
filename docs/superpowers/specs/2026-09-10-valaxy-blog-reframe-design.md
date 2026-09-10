@@ -1,7 +1,7 @@
 # Blog Reframe onto Valaxy — Design
 
 **Date:** 2026-09-10
-**Status:** Approved (pending written-spec review)
+**Status:** Approved — spec reviewed and confirmed 2026-09-10
 **Project root:** `C:\Users\12558\Desktop\知识库\DocAceLittleHome`
 
 ## Goal
@@ -140,8 +140,9 @@ that is not CTF at all.
 post's own section headings. The ctf-swarm-only fields in the `湾区杯2026` post
 are normalised away.
 
-**Post map** — slug, date, competition tag. Dates inferred from in-post
-screenshot timestamps. All nine get `categories: [CTF]`:
+**Post map** — slug, date, competition tag. Dates were inferred from in-post
+screenshot timestamps and then **confirmed by the author on 2026-09-10**. All
+nine get `categories: [CTF]`:
 
 | Post | Slug | Date | Competition tag | Date source |
 |---|---|---|---|---|
@@ -149,10 +150,10 @@ screenshot timestamps. All nine get `categories: [CTF]`:
 | 湾区杯 | `wanqubei-2025` | 2025-09-08 | 湾区杯 | Typora stamps |
 | 第五届长城杯 | `greatwall-5` | 2025-09-14 | 长城杯 | screenshots |
 | ycb2025wp (羊城杯2025) | `ycb-2025` | 2025-10-11 | 羊城杯2025 | Typora stamps |
-| 2025高校网络安全管理运维赛 | `gaoxiao-2025` | 2025-10-20 | 高校赛 | screenshots (10-12 and 10-20; later chosen) |
+| 2025高校网络安全管理运维赛 | `gaoxiao-2025` | 2025-10-20 | 高校赛 | screenshots; author-confirmed |
 | 鹏城杯2025 | `pengcheng-2025` | 2025-12-13 | 鹏城杯2025 | Typora stamps |
 | PWN的学习日志-基础术语 | `pwn-basics` | 2026-01-27 | — (learning note) | H1 reads `（2026/1/27）` |
-| 盘古石-DA | `pangushi-da` | 2026-05-10 | 盘古石 | screenshots (2025-05-06 / 2026-04-19 are prose exam dates) |
+| 盘古石-DA | `pangushi-da` | 2026-05-10 | 盘古石 | screenshots; author-confirmed |
 | [湾区杯2026]记录一下 | `wanqubei-2026` | 2026-09-04 | 湾区杯2026 | existing frontmatter |
 
 Plus one new post: the migrated USB writeup (`usb-keyboard-traffic`).
@@ -162,8 +163,8 @@ and stay empty until the pending learning material is migrated (see Out of
 scope). That is intentional — the scheme exists so those notes have a home
 without a later restructure.
 
-Two dates are soft and should be corrected if wrong: 高校赛 (two candidate
-timestamps) and 盘古石-DA (three timestamps present in prose).
+Slugs and dates are frozen: they appear in published URLs and RSS, so changing
+either after launch breaks links.
 
 **Old content, per decision 3:** the USB writeup becomes a post; its 7 "useful
 links" become the `/links` page; the MD5 tool becomes a link to
@@ -325,7 +326,6 @@ In order:
 | Force push to `main` destroys the old site | Old site preserved on `gh-pages` (step 2) and a `legacy-v1` tag before the force push |
 | Post renamed but a cross-post link left stale | Post URLs are new; the old site had no inbound deep links to preserve |
 | 5.45 MB background left uncompressed | Converted to WebP; verified by checking the emitted file size |
-| Inferred dates are wrong | Both soft dates flagged in §2 for correction before frontmatter is written |
 | WebP conversion tooling unavailable locally | Check before committing to it; fall back to a resized PNG and record the size |
 | Chinese renders differently per reader OS | Accepted trade-off of decision 10. If it looks wrong on other devices, revisit by bundling a subsetted CJK font — the stack is a one-line change |
 | Digits-only `unicode-range` face ignored or tree-shaken | Verification step 5 asserts the face and all three font files survive into `dist/` |
