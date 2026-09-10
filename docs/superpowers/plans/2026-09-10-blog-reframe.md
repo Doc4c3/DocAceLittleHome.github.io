@@ -37,6 +37,20 @@ This project has **no test framework and no test files**. Per its contributing c
 1. `[PARSE_ERROR] '0'-prefixed octal literals and octal escape sequences are deprecated` — one per Windows-backslash image path. Markdown image paths compile into JS `import` statements, so `\1`, `\U` inside `C:\Users\...` are read as JS escapes. All **62 refs across 7 posts**. `dist/` currently contains only `feed.xml` and no `index.html`.
 2. `TypeError: Cannot read properties of undefined (reading 'replace')` in `xml-js` `writeCdata`, from `feed` generating RSS in the `build:after` hook. Probably a cascade from failure 1; re-check after it is fixed.
 
+### Shell notes for the verification commands
+
+This project lives in a Chinese-named directory and runs under Git Bash on
+Windows. Two things bite:
+
+- **Prefer a temp script file over a `<<'PY'` heredoc** for any Python check
+  containing backslashes. Backslash sequences inside heredocs have already
+  been observed to arrive mangled and raise `re.error: unterminated
+  subpattern`. Write the script with the Write tool, run it, delete it.
+- **Quote every path** and be aware that `git` reports paths in the
+  `C:/...` form while the shell uses `/c/...`. When a command needs to print
+  or match Chinese filenames, expect mojibake in captured output; match on
+  the ASCII parts (slugs, counts) instead of on the Chinese text.
+
 ---
 
 ## File Structure
@@ -77,18 +91,20 @@ Run from the project root:
 
 ```bash
 cd pages/posts
-git mv "第十届上海市大学生网络安全大赛WriteUp.md" shanghai-2025.md
-git mv "湾区杯.md"                                 wanqubei-2025.md
-git mv "第五届长城杯.md"                            greatwall-5.md
-git mv "ycb2025wp.md"                              ycb-2025.md
-git mv "2025高校网络安全管理运维赛.md"              gaoxiao-2025.md
-git mv "鹏城杯2025.md"                             pengcheng-2025.md
-git mv "PWN的学习日志-基础术语.md"                   pwn-basics.md
-git mv "盘古石-DA.md"                              pangushi-da.md
-git mv "[湾区杯2026]记录一下.md"                    wanqubei-2026.md
+mv "第十届上海市大学生网络安全大赛WriteUp.md" shanghai-2025.md
+mv "湾区杯.md"                                 wanqubei-2025.md
+mv "第五届长城杯.md"                            greatwall-5.md
+mv "ycb2025wp.md"                              ycb-2025.md
+mv "2025高校网络安全管理运维赛.md"              gaoxiao-2025.md
+mv "鹏城杯2025.md"                             pengcheng-2025.md
+mv "PWN的学习日志-基础术语.md"                   pwn-basics.md
+mv "盘古石-DA.md"                              pangushi-da.md
+mv "[湾区杯2026]记录一下.md"                    wanqubei-2026.md
 ```
 
-`git mv` is used even though the files are currently untracked in the repo; if it errors with `not under version control`, use plain `mv` for that file. The rename of `[湾区杯2026]记录一下.md` is **required**, not cosmetic: the square brackets parse as a Vue Router dynamic parameter and produce the broken route `/posts/:湾区杯2026%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B`.
+Plain `mv`, **not** `git mv`. Nothing under `pages/` is tracked yet (`git ls-files pages/` returns 0), so `git mv` fails with `not under version control` on every one of these. Step 4's `git add pages/posts` picks up the renames as additions.
+
+The rename of `[湾区杯2026]记录一下.md` is **required**, not cosmetic: the square brackets parse as a Vue Router dynamic parameter and produce the broken route `/posts/:湾区杯2026%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B`.
 
 - [ ] **Step 2: Replace the frontmatter on every post**
 
@@ -285,10 +301,12 @@ REF_RE = re.compile(r"(!\[[^\]]*\]\()([^)]+)(\))")
 
 
 def resolve(raw: str):
-    """Return a local filesystem path, or None if the file is not on disk."""
+    """Return a local filesystem path if the file exists on disk, else None.
+
+    Post refs are absolute Windows paths (C:\\Users\\...); backslashes are
+    normalised because the migration script runs under Git Bash on Windows.
+    """
     p = raw.replace("\\", "/")
-    if re.match(r"^[A-Za-z]:/", p):
-        return p if os.path.isfile(p) else None
     return p if os.path.isfile(p) else None
 
 
@@ -677,17 +695,20 @@ html.dark {
 ```bash
 NODE_OPTIONS=--max-old-space-size=4096 pnpm build
 
+echo "--- where did the CSS land? ---"
+find dist -name '*.css' | head
+
 echo "--- digits-only face present in built CSS (expect a match) ---"
-grep -rl 'U+0030-0039' dist/assets/ || echo "FAIL: unicode-range face was dropped"
+grep -rl 'U+0030-0039' dist/ || echo "FAIL: unicode-range face was dropped"
 
 echo "--- font files emitted (expect 3) ---"
-find dist -name '*.otf' -o -name '*.ttf' | wc -l
+find dist \( -name '*.otf' -o -name '*.ttf' \) | wc -l
 
 echo "--- background image emitted ---"
 find dist -name 'bg.webp'
 ```
 
-Expected: a match for `U+0030-0039`; **3** font files; `dist/bg.webp` present. Vite can tree-shake unused font assets, which is why this is asserted rather than assumed.
+Expected: a match for `U+0030-0039`; **3** font files; `dist/bg.webp` present. Vite can tree-shake unused font assets, which is why this is asserted rather than assumed. Search all of `dist/` rather than `dist/assets/` — the CSS directory name is Vite's choice, not ours, so hardcoding it risks a false failure.
 
 - [ ] **Step 6: Commit**
 
@@ -734,8 +755,10 @@ CTF 选手，主要做 misc 和 web，也在做 SRC 漏洞挖掘。
 - [ ] **Step 2: Delete the demo page**
 
 ```bash
-git rm pages/about/site.md
+rm pages/about/site.md
 ```
+
+Plain `rm`, not `git rm` — same reason as Task 1's renames: nothing under `pages/` is tracked yet, so `git rm` fails with `not under version control`. The deletion is captured by `git add` in Step 5.
 
 - [ ] **Step 3: Replace the locale strings**
 
@@ -791,26 +814,30 @@ Everything for this post exists only in the old repo.
 
 ```bash
 RAW=https://raw.githubusercontent.com/Doc4c3/DocAceLittleHome.github.io/main
+MD="md%E6%BA%90%E6%96%87%E4%BB%B6"   # 目录 md源文件
 mkdir -p public/images/posts/usb-keyboard-traffic public/files
 
+# the PDF lives in history/
 curl -fsSL -o public/files/usb-keyboard-traffic.pdf \
   "$RAW/history/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E4%B9%8Busb%E9%94%AE%E7%9B%98%E5%88%86%E6%9E%90.pdf"
 
-# 8 screenshots, renamed to ASCII in document order
-curl -fsSL -o public/images/posts/usb-keyboard-traffic/01.png "$RAW/history/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20123752.png"
-curl -fsSL -o public/images/posts/usb-keyboard-traffic/02.png "$RAW/history/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20124321.png"
-curl -fsSL -o public/images/posts/usb-keyboard-traffic/03.png "$RAW/history/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20130347.png"
-curl -fsSL -o public/images/posts/usb-keyboard-traffic/04.png "$RAW/history/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20130823.png"
-curl -fsSL -o public/images/posts/usb-keyboard-traffic/05.png "$RAW/history/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20131246.png"
-curl -fsSL -o public/images/posts/usb-keyboard-traffic/06.png "$RAW/history/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20131410.png"
-curl -fsSL -o public/images/posts/usb-keyboard-traffic/07.png "$RAW/history/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20132427.png"
-curl -fsSL -o public/images/posts/usb-keyboard-traffic/08.png "$RAW/history/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20132831.png"
+# the 8 screenshots live in history/md源文件/, NOT history/
+# (all 8 verified 200 on 2026-09-10)
+curl -fsSL -o public/images/posts/usb-keyboard-traffic/01.png "$RAW/history/$MD/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20123752.png"
+curl -fsSL -o public/images/posts/usb-keyboard-traffic/02.png "$RAW/history/$MD/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20124321.png"
+curl -fsSL -o public/images/posts/usb-keyboard-traffic/03.png "$RAW/history/$MD/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20130347.png"
+curl -fsSL -o public/images/posts/usb-keyboard-traffic/04.png "$RAW/history/$MD/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20130823.png"
+curl -fsSL -o public/images/posts/usb-keyboard-traffic/05.png "$RAW/history/$MD/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20131246.png"
+curl -fsSL -o public/images/posts/usb-keyboard-traffic/06.png "$RAW/history/$MD/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20131410.png"
+curl -fsSL -o public/images/posts/usb-keyboard-traffic/07.png "$RAW/history/$MD/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20132427.png"
+curl -fsSL -o public/images/posts/usb-keyboard-traffic/08.png "$RAW/history/$MD/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-14%20132831.png"
 
-# the WeChat photo
+# the WeChat photo is also in history/md源文件/
 curl -fsSL -o public/images/posts/usb-keyboard-traffic/09.jpg \
-  "$RAW/history/md%E6%BA%90%E6%96%87%E4%BB%B6/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250514131630.jpg"
+  "$RAW/history/$MD/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250514131630.jpg"
 
 ls -la public/images/posts/usb-keyboard-traffic public/files
+echo "expect 9 images + 1 pdf, all non-zero"
 ```
 
 Expected: 9 images and the PDF, all non-zero.
