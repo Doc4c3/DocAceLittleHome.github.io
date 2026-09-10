@@ -48,6 +48,15 @@ export default defineValaxyConfig<UserThemeConfig>({
         color: 'dodgerblue',
       },
     ],
+
+    footer: {
+      // The theme defaults to a "Sponsor YunYouJun" donation link in the
+      // footer icon. It is upstream branding, not this blog's.
+      icon: {
+        enable: false,
+      },
+      since: 2025,
+    },
   },
 
   unocss: { safelist },
