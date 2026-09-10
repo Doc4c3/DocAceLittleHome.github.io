@@ -565,12 +565,14 @@ echo "--- dist exists ---"; ls dist | head
 echo "--- index.html references the subpath base (expect matches) ---"
 grep -o '/DocAceLittleHome.github.io/assets/[^"]*' dist/index.html | head -3
 echo "--- built post pages (expect 9) ---"
-find dist/posts -name 'index.html' | wc -l
+ls dist/posts/*.html | grep -vc 'index\.html$'
 echo "--- NO route may contain a colon (expect none) ---"
-find dist/posts -type d | grep ':' || echo "OK: no dynamic-param routes"
+find dist -name '*:*' || echo "OK: no dynamic-param routes"
 ```
 
 Expected: `dist/index.html` exists; at least one `/DocAceLittleHome.github.io/assets/...` match; **9** built post pages; `OK: no dynamic-param routes`.
+
+**Do not count pages with `find dist/posts -name 'index.html'`.** Valaxy rc.9's `routeToFileName()` writes a non-index route to `<route>.html`, so posts land at `dist/posts/<slug>.html` and only the listing itself is `dist/posts/index.html`. That counting method returns **1**, not 9, and is a false failure. This was measured directly against a green build on 2026-09-10.
 
 - [ ] **Step 5: Commit**
 
@@ -1054,10 +1056,12 @@ echo "--- links page built ---"
 ls dist/links/index.html
 
 echo "--- all post pages (expect 10) ---"
-find dist/posts -name 'index.html' | wc -l
+ls dist/posts/*.html | grep -vc 'index\.html$'
 ```
 
 Expected: all present; **9** images; **10** posts (9 renamed + USB).
+
+Same counting caveat as Task 3: posts are `dist/posts/<slug>.html`, so counting with `-name 'index.html'` returns 1.
 
 - [ ] **Step 6: Commit**
 
@@ -1274,8 +1278,8 @@ BASE=https://doc4c3.github.io/DocAceLittleHome.github.io
 
 echo "--- home page ---"
 curl -s -o /dev/null -w "  %{http_code}  home\n"                     "$BASE/"
-echo "--- a post page ---"
-curl -s -o /dev/null -w "  %{http_code}  post\n"                     "$BASE/posts/wanqubei-2026/"
+echo "--- a post page (NO trailing slash — see note) ---"
+curl -s -o /dev/null -w "  %{http_code}  post\n"                     "$BASE/posts/wanqubei-2026"
 echo "--- a migrated image ---"
 curl -s -o /dev/null -w "  %{http_code}  image\n"                    "$BASE/images/posts/pengcheng-2025/01.png"
 echo "--- the USB PDF ---"
@@ -1289,6 +1293,8 @@ curl -s "$BASE/" | grep -o '/DocAceLittleHome.github.io/assets/[^"]*' | head -2
 ```
 
 Expected: `200` for all six, and asset URLs containing the subpath prefix. A `404` on assets while `/` returns `200` means `vite.base` did not take effect.
+
+**Post URLs have no trailing slash.** Posts build to `dist/posts/<slug>.html`, and the site's own emitted hrefs are extensionless and slash-free — verified against a green build: `href="/DocAceLittleHome.github.io/posts/wanqubei-2026"`. GitHub Pages serves `/posts/wanqubei-2026` from `posts/wanqubei-2026.html`, but there is no `posts/wanqubei-2026/` directory, so **a trailing slash returns 404**. If the extensionless form 404s too, the fix is a `.nojekyll`-style hosting concern, not a config change — report it rather than improvising.
 
 - [ ] **Step 5: Report the outstanding user action**
 
