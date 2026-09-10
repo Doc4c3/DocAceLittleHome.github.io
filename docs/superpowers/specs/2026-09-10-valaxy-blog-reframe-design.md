@@ -87,8 +87,8 @@ site's dark visual identity onto the new framework.
 | `url` | `https://github.com/Doc4c3/DocAceLittleHome.github.io` | `https://doc4c3.github.io/DocAceLittleHome.github.io/` |
 | `title` | `Valaxy Theme Yun` | `DA's BLOG` |
 | `subtitle` | *(unset)* | `mostly about CTFs and hacking` |
-| `description` | `Valaxy Theme Yun Preview.` | `CTF writeups — web, pwn, reverse, crypto, forensics, misc` |
-| `timezone` | *(unset)* | `Asia/Shanghai` |
+| `description` | `Valaxy Theme Yun Preview.` | `CTFer(misc and web) and SRC researcher` |
+| `timezone` | *(unset)* | `Asia/Hong_Kong` |
 | `mode` | *(unset → auto)* | `dark` |
 | `author.name` | `DocAcer` | unchanged |
 | `author.avatar` | *(unset)* | `/images/avatar.png` — new file added to `public/` |
