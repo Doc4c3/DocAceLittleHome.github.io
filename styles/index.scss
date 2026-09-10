@@ -1,0 +1,43 @@
+// Valaxy auto-loads only styles/index.{ts,css,scss} — css-vars.scss is not
+// picked up on its own (valaxy/dist/shared/valaxy.Cb_HdczD.mjs:4488), so the
+// colour overrides have to be pulled in from this entry point explicitly.
+@use './css-vars.scss';
+
+// --- Typography -----------------------------------------------------------
+// Bender supplies digits ONLY. CSS font fallback is first-match-wins per
+// glyph, so a digits-only face must come first in the stack; otherwise
+// Novecento (which also contains digits) would claim them.
+@font-face {
+  font-family: 'Bender Digits';
+  src: url('/fonts/Bender.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039; // 0-9
+}
+
+// The two Novecento files declare DIFFERENT embedded family names
+// ("Novecento wide" and "Novecento wide Normal"), so we assign one family
+// name ourselves with explicit weights. Do not rely on the embedded names.
+@font-face {
+  font-family: 'Novecento Wide';
+  src: url('/fonts/Novecento-wide-Normal.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Novecento Wide';
+  src: url('/fonts/Novecento-Wide-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+// None of the bundled fonts contain any CJK glyphs, so Chinese comes from
+// the reader's system. This is deliberate (spec decision 10).
+:root {
+  --va-font-sans: 'Bender Digits', 'Novecento Wide', 'Microsoft YaHei',
+    'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', sans-serif;
+}

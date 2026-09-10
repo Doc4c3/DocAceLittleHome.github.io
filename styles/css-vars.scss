@@ -1,0 +1,9 @@
+// Overrides for valaxy-theme-yun. The theme's own dark values are
+// --va-c-bg: #1a1a1d and --va-c-bg-soft: #121215; the old site was pure black.
+html.dark {
+  --va-c-bg: #000;
+  --va-c-bg-soft: #0a0a0a;
+  --va-c-bg-mute: #111;
+  --va-c-bg-light: #1a1a1a;
+  --yun-nav-bg-color: rgb(0 0 0 / 0.8);
+}
