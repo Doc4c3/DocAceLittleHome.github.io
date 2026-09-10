@@ -393,7 +393,7 @@ for f in sorted(glob.glob("pages/posts/*.md")):
     for ref in re.findall(r"!\[[^\]]*\]\(([^)]+)\)", txt):
         if ref.startswith("http"):
             continue
-        p = ref.lstrip("/")
+        p = os.path.join("public", ref.lstrip("/"))
         if not os.path.isfile(p):
             print(f"  MISSING {f}: {ref}")
             bad += 1
@@ -405,6 +405,8 @@ find public/images/posts -type f | wc -l
 ```
 
 Expected: `OK: none`, `unresolved refs: 0`, `61`.
+
+Note the `os.path.join("public", ...)` in the ref check. The refs are web-root-absolute (`/images/...`), which maps to `public/images/...` on disk — `public/` *is* the web root. Checking `ref.lstrip("/")` directly against the filesystem resolves to a non-existent `<root>/images/...` and reports all 61 refs as unresolved regardless of whether the migration worked. Do not "fix" this line by moving the images.
 
 - [ ] **Step 5: Commit**
 
