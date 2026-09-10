@@ -17,7 +17,7 @@ export default defineSiteConfig({
   social: [
     {
       name: 'RSS',
-      link: '/atom.xml',
+      link: '/DocAceLittleHome.github.io/atom.xml',
       icon: 'i-ri-rss-line',
       color: 'orange',
     },
@@ -35,7 +35,7 @@ export default defineSiteConfig({
     },
     {
       name: 'E-Mail',
-      link: '1255893218@qq.com',
+      link: 'mailto:1255893218@qq.com',
       icon: 'i-ri-mail-line',
       color: '#8E71C1',
     },
