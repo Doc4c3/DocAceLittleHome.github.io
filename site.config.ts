@@ -12,7 +12,7 @@ export default defineSiteConfig({
     name: 'DocAcer',
     email: '1255893218@qq.com',
     link: 'https://github.com/Doc4c3',
-    avatar: '/images/avatar.png',
+    avatar: '/DocAceLittleHome.github.io/images/avatar.png',
   },
   social: [
     {
