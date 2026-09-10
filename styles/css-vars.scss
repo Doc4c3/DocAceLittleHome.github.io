@@ -7,3 +7,25 @@ html.dark {
   --va-c-bg-light: #1a1a1a;
   --yun-nav-bg-color: rgb(0 0 0 / 0.8);
 }
+
+// Typography is not mode-specific, so this override sits outside `html.dark`.
+//
+// The theme's --va-font-serif (valaxy/client/styles/vars.scss:21) is
+// `"Noto Serif SC", DM Serif Display, STZhongsong, ...`, and
+// valaxy-theme-yun/App.vue:22 injects a Google Fonts stylesheet for
+// `Noto Serif SC:wght@900` on every page to feed it. Two things consume it: the
+// banner wordmark (.char, valaxy-theme-yun/styles/widgets/banner.scss:90) and
+// Chinese blockquotes (styles/common/markdown.scss:30). So "DA's BLOG" was
+// rendering in Noto Serif SC, not the ported Novecento.
+//
+// Ported faces first, so the wordmark honours Novecento regardless of whether
+// fonts.googleapis.com resolves, and the CJK tail degrades deterministically to
+// whatever serif the reader's OS has. 'Noto Serif SC' stays as a late fallback
+// so Chinese keeps the theme's intended serif look when the webfont does load.
+//
+// This does NOT remove the Google Fonts request — that needs a head override,
+// which is out of scope here. It removes the request's influence on rendering.
+:root {
+  --va-font-serif: 'Novecento Wide', 'Noto Serif SC', 'Songti SC', 'STSong',
+    'SimSun', 'Source Han Serif SC', 'Noto Serif CJK SC', serif;
+}
