@@ -1,0 +1,262 @@
+# Blog Reframe onto Valaxy — Design
+
+**Date:** 2026-09-10
+**Status:** Approved (pending written-spec review)
+**Project root:** `C:\Users\12558\Desktop\知识库\DocAceLittleHome`
+
+## Goal
+
+Replace the hand-written static site currently live at
+`https://doc4c3.github.io/DocAceLittleHome.github.io/` with the Valaxy site
+scaffolded at the project root, keeping the same URL, and porting the old
+site's dark visual identity onto the new framework.
+
+## Decisions
+
+| # | Decision | Chosen |
+|---|---|---|
+| 1 | Where the new site goes live | Replace in place, same URL |
+| 2 | Visual direction | Port the old dark look onto Yun |
+| 3 | Old landing-page content | Migrate what is real, drop the stubs |
+| 4 | Dates for undated posts | Infer from in-post image timestamps |
+| 5 | Post filenames / URL slugs | Rename all posts to ASCII slugs |
+| 6 | Old welcome splash | Dropped |
+| 7 | Deployment mechanism | `main` = source, `gh-pages` = site, seeded before source lands |
+
+## Current state
+
+### Old site (live)
+
+- Repo `Doc4c3/DocAceLittleHome.github.io`, **single branch `main`**, no `gh-pages`.
+- The repo name does not match the account name, so GitHub serves it as a
+  **project site** under a subpath. `https://doc4c3.github.io/` itself is 404.
+- Pages currently serves the **`main` root**. Verified live: `index.html` and
+  `history/ctf1-preview.png` return 200.
+- Content is one hand-written `index.html`: black background, Novecento Wide +
+  Bender fonts, "DA's BLOG", a welcome splash, a links list, and a paginated
+  "recorded CTFs" grid whose `ctf3`–`ctf8` entries point at files that do not
+  exist.
+- The HTML requests `font/NovecentoWide-Regular.otf`, which is **not** in the
+  repo (404 live). The fonts actually present are named differently — see below.
+
+### New site (local)
+
+- Valaxy `1.0.0-rc.9` + `valaxy-theme-yun` `1.0.0-rc.9`, installed, `node_modules`
+  present.
+- **Not a git repository.**
+- Scaffold is still upstream-default and user-visible as such: `site.config.ts`
+  title `Valaxy Theme Yun`, description `Valaxy Theme Yun Preview.`, `url`
+  pointing at the GitHub *repo* page; `pages/about/index.md` containing the
+  Valaxy author's bio and sponsor links; `locales/zh-CN.yml` saying `Valaxy 模版`.
+- `styles/index.scss` and `styles/css-vars.scss` are empty (comments only).
+- 9 posts in `pages/posts/`. Only `[湾区杯2026]记录一下.md` has frontmatter, and
+  it uses ctf-swarm fields (`ctf`, `difficulty`, `points`, `flag_format`) that
+  Valaxy ignores. The other 8 have none.
+- 62 image references across 7 posts, **all absolute local Windows paths**.
+  Verified: 61 resolve on local disk; 1 (`xwechat_files\...\87fa1e...jpg`) does not.
+- `.valaxy/route-map.d.ts` is a stale generated cache (written 13:43:55; most
+  posts were copied in at 13:49–13:50). It registers only one post route.
+
+### Confirmed defects
+
+1. **Bracket filename breaks routing.** `pages/posts/[湾区杯2026]记录一下.md`
+   generates the route
+   `/posts/:湾区杯2026%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%8B` — `[湾区杯2026]` is
+   parsed as a Vue Router dynamic parameter, so that URL is a route template
+   requiring an argument, not a page. Deterministic, not a stale-cache artifact.
+2. **No base path.** `valaxy.config.ts` sets no `vite.base`. For a project site
+   this means every asset 404s after deploy.
+3. **Wrong `siteConfig.url`.** Points at the repo page rather than the Pages URL;
+   `url` drives canonical links and RSS.
+4. **Workflow is misconfigured.** `.github/workflows/gh-pages.yml` runs `npm i`
+   against a `pnpm-lock.yaml`, and pins `actions/checkout@v2` /
+   `actions/setup-node@v2`.
+5. **Pushing source to `main` takes the live site down.** Valaxy's project root
+   contains no `index.html` (it is generated at build time). Pages serves `main`'s
+   root today, so once source lands there the URL 404s until Pages is repointed
+   *and* `gh-pages` is populated.
+
+## Design
+
+### 1. Identity and base path
+
+`site.config.ts`:
+
+| Field | Now | Becomes |
+|---|---|---|
+| `url` | `https://github.com/Doc4c3/DocAceLittleHome.github.io` | `https://doc4c3.github.io/DocAceLittleHome.github.io/` |
+| `title` | `Valaxy Theme Yun` | `DA's BLOG` |
+| `subtitle` | *(unset)* | `mostly about CTFs and hacking` |
+| `description` | `Valaxy Theme Yun Preview.` | `CTF writeups — web, pwn, reverse, crypto, forensics, misc` |
+| `timezone` | *(unset)* | `Asia/Shanghai` |
+| `mode` | *(unset → auto)* | `dark` |
+| `author.name` | `DocAcer` | unchanged |
+| `author.avatar` | *(unset)* | `/images/avatar.png` — new file added to `public/` |
+| `author.email` | *(unset)* | `1255893218@qq.com` |
+| `author.link` | *(unset)* | `https://github.com/Doc4c3` |
+| `social` | RSS / GitHub / Bilibili / E-Mail | unchanged — already correct |
+
+`valaxy.config.ts` gains:
+
+```ts
+vite: { base: '/DocAceLittleHome.github.io/' },
+```
+
+Confirmed against the official docs and against
+`node_modules/valaxy/dist/node/index.d.mts:847` (`vite?: UserConfig` is a valid
+top-level key). The docs state: *"Repositories named `your-username.github.io`
+are served from `/` and do not need a custom base. Other repository names are
+supported as project sites; configure `base: '/repository-name/'`."*
+
+`url` and `base` are different fields and both are required: `url` is the
+canonical/permalink URL used by SSG and RSS; `base` is the asset prefix. Setting
+only one produces a site that loads with dead links.
+
+Also: `banner.title` set, and the nav entry currently pointing at `decimo.top`
+retargeted to `/links`.
+
+**Placeholder cleanup:** rewrite `pages/about/index.md` as the real bio; delete
+`pages/about/site.md`; replace `locales/zh-CN.yml` contents.
+
+### 2. Content model
+
+**Filenames.** All 9 posts renamed to ASCII slugs. `title` lives in frontmatter
+and is what appears on the page, so nothing user-visible is lost. This removes
+the bracket routing defect and the percent-encoded URLs together.
+
+**Frontmatter.** Every post gains `title`, `date`, `categories`, `tags`.
+`categories` = competition; `tags` = discipline (`web`, `pwn`, `reverse`,
+`crypto`, `forensics`, `misc`, `ai`). The ctf-swarm-only fields in the
+`湾区杯2026` post are normalised away.
+
+**Post map** — slug, date, category. Dates inferred from in-post screenshot
+timestamps:
+
+| Post | Slug | Date | Category | Date source |
+|---|---|---|---|---|
+| 第十届上海市大学生网络安全大赛WriteUp | `shanghai-2025` | 2025-08-06 | 上海市赛 | screenshots |
+| 湾区杯 | `wanqubei-2025` | 2025-09-08 | 湾区杯 | Typora stamps |
+| 第五届长城杯 | `greatwall-5` | 2025-09-14 | 长城杯 | screenshots |
+| ycb2025wp (羊城杯2025) | `ycb-2025` | 2025-10-11 | 羊城杯2025 | Typora stamps |
+| 2025高校网络安全管理运维赛 | `gaoxiao-2025` | 2025-10-20 | 高校赛 | screenshots (10-12 and 10-20; later chosen) |
+| 鹏城杯2025 | `pengcheng-2025` | 2025-12-13 | 鹏城杯2025 | Typora stamps |
+| PWN的学习日志-基础术语 | `pwn-basics` | 2026-01-27 | PWN | H1 reads `（2026/1/27）` |
+| 盘古石-DA | `pangushi-da` | 2026-05-10 | 盘古石 | screenshots (2025-05-06 / 2026-04-19 are prose exam dates) |
+| [湾区杯2026]记录一下 | `wanqubei-2026` | 2026-09-04 | 湾区杯2026 | existing frontmatter |
+
+Plus one new post: the migrated USB writeup (`usb-keyboard-traffic`).
+
+Two dates are soft and should be corrected if wrong: 高校赛 (two candidate
+timestamps) and 盘古石-DA (three timestamps present in prose).
+
+**Old content, per decision 3:** the USB writeup becomes a post; its 7 "useful
+links" become the `/links` page; the MD5 tool becomes a link to
+`github.com/Doc4c3/faster-MD5`. The `ctf3`–`ctf8` placeholder cards are dropped.
+
+The USB writeup source (`history/md源文件/流量分析之usb键盘分析.md`) contains a
+raw HTML `<img src="history\...">`. The Valaxy docs state raw HTML `<a>` links are
+*not* base-adjusted, so this must be converted to markdown image syntax.
+
+### 3. Assets and the dark look
+
+**Images.** 62 refs → `public/images/posts/<slug>/01.png, 02.png, …`, renumbered
+in document order. Sequential ASCII names remove both the Chinese-with-spaces
+names and the meaningless Typora names; per-post folders make collisions
+impossible. Refs become root-absolute `/images/posts/<slug>/NN.png`, which the
+docs confirm is base-adjusted automatically *for markdown images*.
+
+**Fonts and background**, sourced from the old repo via raw GitHub URLs:
+
+- `font/Bender.otf`, `font/Novecento-Wide-Bold-2.otf`,
+  `font/Novecento-wide-Normal-2.ttf` → `public/fonts/`, declared with
+  `@font-face` in `styles/index.scss`.
+- `8f8a8af6d4afbc463b4b43460df474493d0c6123.png` (**5.45 MB**) → converted to
+  WebP before shipping. This is the largest asset on the site by an order of
+  magnitude.
+- Also fetched from the old repo: `history/流量分析之usb键盘分析.pdf`, the 8 USB
+  screenshots, and `history/md源文件/微信图片_20250514131630.jpg` — the latter is
+  the one image missing from local disk.
+
+**Theme wiring.** The Yun theme already exposes the needed knobs:
+
+| Old site | Yun knob | Value |
+|---|---|---|
+| black background | `styles/css-vars.scss` → `--va-c-bg` (+ `--va-c-bg-soft`, `--va-c-bg-light`) | `#000`; theme default is `#1a1a1d` |
+| pink hover | `themeConfig.colors.primary` | `#FFC0CB`; default `#0078E7` |
+| Novecento Wide | `--va-font-sans` | `'Novecento Wide', sans-serif` |
+| Bender | `--va-font-mono` | `'Bender', monospace` |
+| background image | `themeConfig.bg_image` | `{ enable: true, url: '/bg.webp', dark: '/bg.webp', opacity: 0.15 }` — opacity is a judgement call, tune on first render |
+| "DA's BLOG" wordmark | `banner.title` + `--yun-home-hero-name-color` | title as-is; colour `#fff` |
+
+`themeConfig.type` stays at its default `'nimbo'` — the two variants differ in
+layout structure, and the old site carries no structural information to choose
+between them.
+
+The pink comes from the old site's `:hover { background-color: pink }` on links
+and pagination. Applied as `colors.primary` it reaches the nav, links, and tags
+at once rather than needing per-element overrides.
+
+**Splash dropped** (decision 6). The theme's `prologue` option is commented out
+in `node_modules/valaxy-theme-yun/types/index.d.ts:143-149`, so it is not
+available as a config toggle in rc.9; porting the splash would require a custom
+component plus layout override.
+
+### 4. Deployment
+
+**Order of operations** (decision 7) — chosen so the live URL never 404s:
+
+1. `git init` locally; add the remote.
+2. Fetch `origin/main`; create `gh-pages` from the current `main` content and
+   push it. The old site now exists on two branches.
+3. **User:** Settings → Pages → Source → `gh-pages`. The URL still shows the old
+   site — nothing visibly changes.
+4. Push Valaxy source to `main`. Because the local history is unrelated to
+   `origin/main`'s, this requires a force push. This is safe **only because step
+   2 preserved the old site**; also tag the old `main` (e.g. `legacy-v1`) as a
+   second recovery path.
+5. The workflow builds and replaces `gh-pages` with the new site. Site goes live.
+
+**Workflow fixes** to `.github/workflows/gh-pages.yml`: pnpm with
+`--frozen-lockfile` instead of `npm i`; bump `actions/checkout` and
+`actions/setup-node` to current versions; keep `publish_dir: ./dist` and
+`force_orphan: true`. `on.push.branches` already includes `main` — correct as-is.
+
+**Two manual GitHub settings, both owned by the user:**
+
+1. Settings → Actions → General → Workflow permissions → *Read and write*
+   (without this the push to `gh-pages` is rejected).
+2. Settings → Pages → Source → `gh-pages`.
+
+**Nothing is pushed to GitHub without explicit confirmation**, since that reaches
+beyond the local machine.
+
+## Verification
+
+In order:
+
+1. `pnpm build` succeeds locally.
+2. Built `dist/index.html` references `/DocAceLittleHome.github.io/assets/…` —
+   proves `vite.base` took effect.
+3. No post route in the built output contains `:` — proves the bracket defect is
+   gone.
+4. All post image paths resolve inside `dist/`.
+5. After deploy, fetch the live URL and confirm 200 for: the home page, one post
+   page, one migrated image, and the USB PDF.
+
+## Out of scope
+
+- Search. `siteConfig.search.enable` stays `false`.
+- Comments, analytics, RSS beyond what `siteConfig.url` already enables.
+- `Dockerfile`, `nginx.conf`, `netlify.toml`, `vercel.json` — left as scaffold
+  defaults; they are unused by the GitHub Pages deploy.
+- Any visual redesign beyond porting the existing dark identity.
+
+## Risks
+
+| Risk | Mitigation |
+|---|---|
+| Force push to `main` destroys the old site | Old site preserved on `gh-pages` (step 2) and a `legacy-v1` tag before the force push |
+| Post renamed but a cross-post link left stale | Post URLs are new; the old site had no inbound deep links to preserve |
+| 5.45 MB background left uncompressed | Converted to WebP; verified by checking the emitted file size |
+| Inferred dates are wrong | Both soft dates flagged in §2 for correction before frontmatter is written |
+| WebP conversion tooling unavailable locally | Check before committing to it; fall back to a resized PNG and record the size |
