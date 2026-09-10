@@ -22,6 +22,8 @@ site's dark visual identity onto the new framework.
 | 5 | Post filenames / URL slugs | Rename all posts to ASCII slugs |
 | 6 | Old welcome splash | Dropped |
 | 7 | Deployment mechanism | `main` = source, `gh-pages` = site, seeded before source lands |
+| 8 | Category scheme | Exactly three site-wide: `CTF`, `SRC`, `Learning` |
+| 9 | Learning-material migration | Deferred to a follow-up session (see Out of scope) |
 
 ## Current state
 
@@ -125,14 +127,22 @@ and is what appears on the page, so nothing user-visible is lost. This removes
 the bracket routing defect and the percent-encoded URLs together.
 
 **Frontmatter.** Every post gains `title`, `date`, `categories`, `tags`.
-`categories` = competition; `tags` = discipline (`web`, `pwn`, `reverse`,
-`crypto`, `forensics`, `misc`, `ai`). The ctf-swarm-only fields in the
-`湾区杯2026` post are normalised away.
 
-**Post map** — slug, date, category. Dates inferred from in-post screenshot
-timestamps:
+**Categories — exactly three, site-wide:** `CTF`, `SRC`, `Learning`. This is a
+deliberate change from the per-competition scheme considered earlier: competition
+names were too fine-grained, and the blog needs to accommodate learning material
+that is not CTF at all.
 
-| Post | Slug | Date | Category | Date source |
+`tags` carry what categories no longer do: the competition name (`湾区杯2026`,
+`鹏城杯2025`, …) plus discipline tags (`web`, `pwn`, `reverse`, `crypto`,
+`forensics`, `misc`, `ai`). Discipline tags are assigned per post from that
+post's own section headings. The ctf-swarm-only fields in the `湾区杯2026` post
+are normalised away.
+
+**Post map** — slug, date, competition tag. Dates inferred from in-post
+screenshot timestamps. All nine get `categories: [CTF]`:
+
+| Post | Slug | Date | Competition tag | Date source |
 |---|---|---|---|---|
 | 第十届上海市大学生网络安全大赛WriteUp | `shanghai-2025` | 2025-08-06 | 上海市赛 | screenshots |
 | 湾区杯 | `wanqubei-2025` | 2025-09-08 | 湾区杯 | Typora stamps |
@@ -140,11 +150,16 @@ timestamps:
 | ycb2025wp (羊城杯2025) | `ycb-2025` | 2025-10-11 | 羊城杯2025 | Typora stamps |
 | 2025高校网络安全管理运维赛 | `gaoxiao-2025` | 2025-10-20 | 高校赛 | screenshots (10-12 and 10-20; later chosen) |
 | 鹏城杯2025 | `pengcheng-2025` | 2025-12-13 | 鹏城杯2025 | Typora stamps |
-| PWN的学习日志-基础术语 | `pwn-basics` | 2026-01-27 | PWN | H1 reads `（2026/1/27）` |
+| PWN的学习日志-基础术语 | `pwn-basics` | 2026-01-27 | — (learning note) | H1 reads `（2026/1/27）` |
 | 盘古石-DA | `pangushi-da` | 2026-05-10 | 盘古石 | screenshots (2025-05-06 / 2026-04-19 are prose exam dates) |
 | [湾区杯2026]记录一下 | `wanqubei-2026` | 2026-09-04 | 湾区杯2026 | existing frontmatter |
 
 Plus one new post: the migrated USB writeup (`usb-keyboard-traffic`).
+
+**Category occupancy today is 10 / 0 / 0.** SRC and Learning are created empty
+and stay empty until the pending learning material is migrated (see Out of
+scope). That is intentional — the scheme exists so those notes have a home
+without a later restructure.
 
 Two dates are soft and should be corrected if wrong: 高校赛 (two candidate
 timestamps) and 盘古石-DA (three timestamps present in prose).
@@ -245,6 +260,17 @@ In order:
 
 ## Out of scope
 
+- **Learning-material migration.** ~17 notes outside the blog are deliberately
+  deferred to a follow-up session. Inventory, so the deferral is concrete:
+  - `src/` — `SRC学习蓝图.md`, `阶段0-规则与评级/03-阿里ASRC评级规则.md`,
+    `阶段0/05-合规红线与法律.md`, `阶段1-Web漏洞/01…05` (SQL注入 ×3, 命令注入,
+    PHP弱类型) + `README.md`, `SQL.md` → category `SRC`
+  - `web/` — 爬虫学习一, SOCKET编程学习一/二 → `Learning`
+  - `pwn/` — PWN的学习日志-小提示 → `CTF`
+  - `re/` — Windows绕过安全 → `Learning`
+  - `ai_learning/` — AI学习中。。。🫠 → `Learning`
+  - `ftp/` — FTP 命令速查小指南 → `Learning`
+  - `车/` (5,924 files) is a SavvyCAN tool dump, not content. Excluded permanently.
 - Search. `siteConfig.search.enable` stays `false`.
 - Comments, analytics, RSS beyond what `siteConfig.url` already enables.
 - `Dockerfile`, `nginx.conf`, `netlify.toml`, `vercel.json` — left as scaffold
