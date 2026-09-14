@@ -1,7 +1,7 @@
 import { defineSiteConfig } from 'valaxy'
 
 export default defineSiteConfig({
-  url: 'https://doc4c3.github.io/DocAceLittleHome.github.io/',
+  url: 'https://docacer.top/',
   lang: 'zh-CN',
   title: "DA's BLOG",
   subtitle: 'mostly about CTFs and hacking',
@@ -18,25 +18,25 @@ export default defineSiteConfig({
   // `siteConfig.favicon` has three consumers with different base handling, so it
   // needs one value that satisfies all of them:
   //   - valaxy/dist/shared/valaxy.Cb_HdczD.mjs:647 emits it verbatim into the raw
-  //     head (no withBase), so a bare '/favicon.svg' 404s at the account root;
+  //     head (no withBase);
   //   - valaxy/client/composables/app/useValaxyHead.ts:38 applies withBase();
   //   - valaxy/client/composables/app/useValaxyApp.ts:38 resolves it against
   //     siteConfig.url for og:image/twitter:image.
   // withBase() and resolveSiteUrl() both short-circuit on absolute URLs
-  // (valaxy/client/utils/path.ts:15,25), so the absolute form is the only one
-  // that is correct for the verbatim consumer and un-doubled for the other two.
+  // (valaxy/client/utils/path.ts:15,25), so the absolute form stays correct for
+  // the verbatim consumer and un-doubled for the other two.
   // Same trade-off as `author.avatar` below.
-  favicon: 'https://doc4c3.github.io/DocAceLittleHome.github.io/favicon.svg',
+  favicon: 'https://docacer.top/favicon.png',
   author: {
     name: 'DocAcer',
     email: '1255893218@qq.com',
     link: 'https://github.com/Doc4c3',
-    avatar: 'https://doc4c3.github.io/DocAceLittleHome.github.io/images/avatar.png',
+    avatar: 'https://docacer.top/images/avatar.png',
   },
   social: [
     {
       name: 'RSS',
-      link: '/DocAceLittleHome.github.io/atom.xml',
+      link: '/atom.xml',
       icon: 'i-ri-rss-line',
       color: 'orange',
     },

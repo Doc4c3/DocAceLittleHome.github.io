@@ -8,19 +8,15 @@ const safelist = [
   'i-ri-home-line',
 ]
 
-// Mirrors `vite.base` below and `siteConfig.url`. GitHub serves this repo as a
-// *project* site, so the deploy origin is the account root and the site itself
-// lives under the repo subpath.
-const DEPLOY_ORIGIN = 'https://doc4c3.github.io'
-const DEPLOY_BASE = '/DocAceLittleHome.github.io'
+// Mirrors `vite.base` below and `siteConfig.url`. The site is served from the
+// apex of the custom domain, so there is no project subpath.
+const DEPLOY_ORIGIN = 'https://docacer.top'
+const DEPLOY_BASE = ''
 
 /**
- * `vite-ssg-sitemap` builds every entry as `new URL(route, hostname)`, which
- * discards the hostname's own path — so all the `<loc>` values lose the project
- * subpath and point at the account root, which 404s. The feeds are unaffected
- * because they concatenate strings out of the same `url` field, and that
- * asymmetry is what hid this. Re-add the subpath, and drop `/404`, which should
- * not be indexed.
+ * `vite-ssg-sitemap` builds every entry as `new URL(route, hostname)`. With the
+ * site at the domain apex the paths come out correct already, so the only
+ * remaining job here is to drop `/404`, which should not be indexed.
  */
 async function fixSitemapLocPaths() {
   const sitemap = resolve('dist/sitemap.xml')
@@ -65,11 +61,9 @@ async function fixSitemapLocPaths() {
 export default defineValaxyConfig<UserThemeConfig>({
   // site config see site.config.ts
 
-  // This repo is a GitHub Pages *project* site (repo name != account name),
-  // so it is served from a subpath and every asset needs this prefix.
-  // Both leading and trailing slashes are required.
+  // Served from the apex of the custom domain, so assets live at the root.
   vite: {
-    base: '/DocAceLittleHome.github.io/',
+    base: '/',
     // `ssgOptions` is a top-level Vite config key, not part of Valaxy's own
     // `build` section: valaxy/dist/node/index.d.mts:1035 augments Vite's
     // `UserConfig` with it and valaxy/dist/shared/valaxy.Cb_HdczD.mjs:6294
@@ -107,8 +101,8 @@ export default defineValaxyConfig<UserThemeConfig>({
 
     bg_image: {
       enable: true,
-      url: '/DocAceLittleHome.github.io/bg.webp',
-      dark: '/DocAceLittleHome.github.io/bg.webp',
+      url: '/bg.webp',
+      dark: '/bg.webp',
       opacity: 0.15,
     },
 

@@ -40,3 +40,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           force_orphan: true
+          # force_orphan replaces the whole gh-pages branch on every deploy;
+          # without this the CNAME file is wiped and the custom domain is lost.
+          cname: docacer.top
