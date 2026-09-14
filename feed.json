@@ -1,0 +1,134 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "DA's BLOG",
+    "home_page_url": "https://docacer.top/",
+    "feed_url": "https://docacer.top/feed.json",
+    "description": "CTFer(misc and web) and SRC researcher",
+    "icon": "https://docacer.top/images/avatar.png",
+    "author": {
+        "name": "DocAcer",
+        "url": "https://github.com/Doc4c3"
+    },
+    "items": [
+        {
+            "id": "https://docacer.top/posts/wanqubei-2026",
+            "content_html": "<h1>湾区杯2026 总体 WP</h1>\n<h2>总览</h2>\n<p>共 21 个题目目录（其中 <code>pn-01;W</code>、<code>pn-03;C</code> 为空副本目录；<code>web-01</code> 下含 DockRelay、ShadowArchiv</p>\n<br/><p>访问 <a href=\"https://docacer.top/posts/wanqubei-2026\" target=\"_blank\">https://docacer.top/posts/wanqubei-2026</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/wanqubei-2026",
+            "title": "湾区杯2026 总体 WP",
+            "date_modified": "2026-09-04T00:00:00.000Z",
+            "date_published": "2026-09-04T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        },
+        {
+            "id": "https://docacer.top/posts/pangushi-da",
+            "content_html": "<h1>盘古石-DA 计算机取证</h1>\n<p>2.分析刘洋liuyang_pc.E01检材，计算机系统Build版本为？[答案格式：19000]</p>\n<p>![屏幕截图 2026-05-10 143853](/image</p>\n<br/><p>访问 <a href=\"https://docacer.top/posts/pangushi-da\" target=\"_blank\">https://docacer.top/posts/pangushi-da</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/pangushi-da",
+            "title": "盘古石-DA 计算机取证",
+            "date_modified": "2026-05-10T00:00:00.000Z",
+            "date_published": "2026-05-10T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        },
+        {
+            "id": "https://docacer.top/posts/pwn-basics",
+            "content_html": "<h1>PWN的学习日志（2026/1/27）</h1>\n<h2>PWN的一些基础术语和知识</h2>\n<p>在 <strong>x86-64 架构</strong>里，常见寄存器有：</p>\n<p>| 寄存器 | 作用（新手版）               |</p>\n<br/><p>访问 <a href=\"https://docacer.top/posts/pwn-basics\" target=\"_blank\">https://docacer.top/posts/pwn-basics</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/pwn-basics",
+            "title": "PWN的学习日志（2026/1/27）",
+            "date_modified": "2026-01-27T00:00:00.000Z",
+            "date_published": "2026-01-27T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        },
+        {
+            "id": "https://docacer.top/posts/pengcheng-2025",
+            "content_html": "<h1>鹏城杯2025</h1>\n<h2>misc</h2>\n<h3><strong>pcb5-blue</strong></h3>\n<p>![image-20251213104718704](/images/posts/pengcheng-2025/01.p</p>\n<br/><p>访问 <a href=\"https://docacer.top/posts/pengcheng-2025\" target=\"_blank\">https://docacer.top/posts/pengcheng-2025</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/pengcheng-2025",
+            "title": "鹏城杯2025",
+            "date_modified": "2025-12-13T00:00:00.000Z",
+            "date_published": "2025-12-13T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        },
+        {
+            "id": "https://docacer.top/posts/gaoxiao-2025",
+            "content_html": "<h1>2025高校网络安全管理运维赛</h1>\n<h2>电子数据取证分析师赛道</h2>\n<h3>电子数据分析-aipowah（检材04）</h3>\n<h4>flag 1：</h4>\n<p>要知道服务器rootfs采用的文件系统格式，就去</p>\n<br/><p>访问 <a href=\"https://docacer.top/posts/gaoxiao-2025\" target=\"_blank\">https://docacer.top/posts/gaoxiao-2025</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/gaoxiao-2025",
+            "title": "2025高校网络安全管理运维赛",
+            "date_modified": "2025-10-20T00:00:00.000Z",
+            "date_published": "2025-10-20T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        },
+        {
+            "id": "https://docacer.top/posts/ycb-2025",
+            "content_html": "<h1>羊城杯2025</h1>\n<h2>DS&amp;AI</h2>\n<h3>SM4-OFB</h3>\n<p>题目上来先给了一个hint：我得到了由某个密钥加密过的部分数据，其中，已知第一条记录的明文为： 蒋宏玲\t 17145949399</p>\n<br/><p>访问 <a href=\"https://docacer.top/posts/ycb-2025\" target=\"_blank\">https://docacer.top/posts/ycb-2025</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/ycb-2025",
+            "title": "羊城杯2025",
+            "date_modified": "2025-10-11T00:00:00.000Z",
+            "date_published": "2025-10-11T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        },
+        {
+            "id": "https://docacer.top/posts/greatwall-5",
+            "content_html": "<h1>第五届长城杯</h1>\n<h2>AI</h2>\n<h3>easy_poison</h3>\n<p>上来先是一些训练ai相关的文件</p>\n<p>先看看data，写个脚本来筛选投毒的样本</p>\n<pre><code class=\"language-python\"># export_conflic</code></pre>\n<br/><p>访问 <a href=\"https://docacer.top/posts/greatwall-5\" target=\"_blank\">https://docacer.top/posts/greatwall-5</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/greatwall-5",
+            "title": "第五届长城杯",
+            "date_modified": "2025-09-14T00:00:00.000Z",
+            "date_published": "2025-09-14T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        },
+        {
+            "id": "https://docacer.top/posts/wanqubei-2025",
+            "content_html": "<h1>湾区杯</h1>\n<h3>Forensics</h3>\n<h4>关注公众号获取 flag</h4>\n<p>如题</p>\n<h4>checkwebshell</h4>\n<p>![image-20250908162016316](/images</p>\n<br/><p>访问 <a href=\"https://docacer.top/posts/wanqubei-2025\" target=\"_blank\">https://docacer.top/posts/wanqubei-2025</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/wanqubei-2025",
+            "title": "湾区杯",
+            "date_modified": "2025-09-08T00:00:00.000Z",
+            "date_published": "2025-09-08T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        },
+        {
+            "id": "https://docacer.top/posts/shanghai-2025",
+            "content_html": "<h1>第十届上海市大学生网络安全大赛WriteUp</h1>\n<h2>MISC</h2>\n<h3>derderjia</h3>\n<p>上来先看来一下http报文，在最后一个包发现了server_key.txt的内容</p>\n<p>![屏幕截图</p>\n<br/><p>访问 <a href=\"https://docacer.top/posts/shanghai-2025\" target=\"_blank\">https://docacer.top/posts/shanghai-2025</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/shanghai-2025",
+            "title": "第十届上海市大学生网络安全大赛WriteUp",
+            "date_modified": "2025-08-06T00:00:00.000Z",
+            "date_published": "2025-08-06T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        },
+        {
+            "id": "https://docacer.top/posts/usb-keyboard-traffic",
+            "content_html": "<h1>流量分析之USB键盘分析</h1>\n<p>例题：<a href=\"https://buuoj.cn/challenges#USB\">https://buuoj.cn/challenges#USB</a></p>\n<h3>题目分析</h3>\n<p>刚打开就是一个 rar 和一个 ftm</p>\n<p>![打开文件](/image</p>\n<br/><p>访问 <a href=\"https://docacer.top/posts/usb-keyboard-traffic\" target=\"_blank\">https://docacer.top/posts/usb-keyboard-traffic</a> 阅读全文。</p>",
+            "url": "https://docacer.top/posts/usb-keyboard-traffic",
+            "title": "流量分析之USB键盘分析",
+            "date_modified": "2025-05-14T00:00:00.000Z",
+            "date_published": "2025-05-14T00:00:00.000Z",
+            "author": {
+                "name": "DocAcer",
+                "url": "https://github.com/Doc4c3"
+            }
+        }
+    ]
+}
